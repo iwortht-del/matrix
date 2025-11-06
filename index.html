@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>// TRON_ARES_SYSTEM //</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background-color: #0a0a12;
+            color: #00f3ff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* System initialization screen */
+        #system-init {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #00f3ff;
+        }
+        
+        .init-logo {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 0 0 10px #00f3ff, 0 0 20px #00f3ff;
+            animation: pulse 2s infinite;
+        }
+        
+        .init-progress {
+            width: 300px;
+            height: 4px;
+            background: rgba(0, 243, 255, 0.2);
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        
+        .init-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #00f3ff;
+            box-shadow: 0 0 10px #00f3ff;
+            transition: width 0.3s;
+        }
+        
+        .init-status {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            text-align: center;
+            min-height: 1.5em;
+        }
+        
+        /* Main content - initially hidden */
+        #main-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+        
+        /* Ares Character Popup */
+        .ares-popup {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 300px;
+            background: rgba(0, 10, 30, 0.9);
+            border: 2px solid #00f3ff;
+            border-radius: 10px;
+            padding: 15px;
+            z-index: 1800;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.7);
+            display: none;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: transform 0.5s, opacity 0.5s;
+        }
+        
+        .ares-popup.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .ares-popup::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(0, 243, 255, 0.1) 50%, 
+                rgba(0, 0, 0, 0.1) 50%
+            );
+            background-size: 100% 4px;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.15;
+            border-radius: 8px;
+        }
+        
+        .ares-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #00f3ff;
+            padding-bottom: 8px;
+        }
+        
+        .ares-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #00f3ff, #ff00c8);
+            border-radius: 50%;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.7);
+        }
+        
+        .ares-name {
+            color: #00f3ff;
+            font-weight: bold;
+            text-shadow: 0 0 5px #00f3ff;
+        }
+        
+        .ares-message {
+            color: #00ff9d;
+            font-size: 0.9rem;
+            text-shadow: 0 0 3px #00ff9d;
+        }
+        
+        .ares-typing {
+            display: inline-block;
+            width: 10px;
+            height: 2px;
+            background: #00ff9d;
+            margin-left: 2px;
+            animation: typing 1s infinite;
+        }
+        
+        @keyframes typing {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        /* Cyberpunk Popup */
+        .cyber-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 10, 20, 0.95);
+            border: 2px solid #00f3ff;
+            border-radius: 5px;
+            padding: 30px;
+            z-index: 2000;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.7);
+            min-width: 400px;
+            max-width: 90%;
+            display: none;
+        }
+        
+        .cyber-popup::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(0, 243, 255, 0.1) 50%, 
+                rgba(0, 0, 0, 0.1) 50%
+            );
+            background-size: 100% 4px;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.15;
+        }
+        
+        .popup-header {
+            color: #ff00c8;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 5px #ff00c8;
+            border-bottom: 1px solid #ff00c8;
+            padding-bottom: 10px;
+        }
+        
+        .popup-content {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .popup-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .cyber-button {
+            background: transparent;
+            border: 1px solid #00f3ff;
+            color: #00f3ff;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 3px;
+        }
+        
+        .cyber-button:hover {
+            background: rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+        
+        .cyber-button.danger {
+            border-color: #ff0066;
+            color: #ff0066;
+        }
+        
+        .cyber-button.danger:hover {
+            background: rgba(255, 0, 102, 0.2);
+            box-shadow: 0 0 10px rgba(255, 0, 102, 0.5);
+        }
+        
+        /* Self Destruct Popup */
+        #self-destruct-popup {
+            display: none;
+        }
+        
+        .countdown-display {
+            font-size: 4rem;
+            text-align: center;
+            margin: 20px 0;
+            color: #ff0066;
+            text-shadow: 0 0 10px #ff0066;
+            font-weight: bold;
+        }
+        
+        .destruct-warning {
+            color: #ff0066;
+            text-align: center;
+            margin: 10px 0;
+            font-size: 1.2rem;
+        }
+        
+        .destruct-code {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .code-digit {
+            width: 40px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #ff0066;
+            color: #ff0066;
+            font-size: 1.5rem;
+            text-align: center;
+            text-shadow: 0 0 5px #ff0066;
+        }
+        
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1500;
+            display: none;
+        }
+        
+        /* Glitch effect for headers */
+        .glitch {
+            position: relative;
+            color: #00f3ff;
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px #00f3ff;
+        }
+        
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00c8;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 #00ff9d;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+        
+        @keyframes glitch-anim {
+            0% { clip: rect(42px, 9999px, 44px, 0); }
+            5% { clip: rect(12px, 9999px, 59px, 0); }
+            10% { clip: rect(48px, 9999px, 29px, 0); }
+            15% { clip: rect(42px, 9999px, 73px, 0); }
+            20% { clip: rect(63px, 9999px, 27px, 0); }
+            25% { clip: rect(34px, 9999px, 55px, 0); }
+            30% { clip: rect(86px, 9999px, 73px, 0); }
+            35% { clip: rect(20px, 9999px, 20px, 0); }
+            40% { clip: rect(26px, 9999px, 60px, 0); }
+            45% { clip: rect(25px, 9999px, 66px, 0); }
+            50% { clip: rect(57px, 9999px, 98px, 0); }
+            55% { clip: rect(5px, 9999px, 46px, 0); }
+            60% { clip: rect(82px, 9999px, 31px, 0); }
+            65% { clip: rect(54px, 9999px, 27px, 0); }
+            70% { clip: rect(28px, 9999px, 99px, 0); }
+            75% { clip: rect(45px, 9999px, 69px, 0); }
+            80% { clip: rect(23px, 9999px, 85px, 0); }
+            85% { clip: rect(54px, 9999px, 84px, 0); }
+            90% { clip: rect(45px, 9999px, 47px, 0); }
+            95% { clip: rect(37px, 9999px, 20px, 0); }
+            100% { clip: rect(4px, 9999px, 91px, 0); }
+        }
+        
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            5% { clip: rect(52px, 9999px, 74px, 0); }
+            10% { clip: rect(79px, 9999px, 85px, 0); }
+            15% { clip: rect(75px, 9999px, 5px, 0); }
+            20% { clip: rect(67px, 9999px, 61px, 0); }
+            25% { clip: rect(14px, 9999px, 79px, 0); }
+            30% { clip: rect(1px, 9999px, 66px, 0); }
+            35% { clip: rect(86px, 9999px, 30px, 0); }
+            40% { clip: rect(23px, 9999px, 98px, 0); }
+            45% { clip: rect(85px, 9999px, 72px, 0); }
+            50% { clip: rect(71px, 9999px, 75px, 0); }
+            55% { clip: rect(2px, 9999px, 48px, 0); }
+            60% { clip: rect(30px, 9999px, 16px, 0); }
+            65% { clip: rect(59px, 9999px, 50px, 0); }
+            70% { clip: rect(41px, 9999px, 62px, 0); }
+            75% { clip: rect(2px, 9999px, 82px, 0); }
+            80% { clip: rect(47px, 9999px, 73px, 0); }
+            85% { clip: rect(3px, 9999px, 27px, 0); }
+            90% { clip: rect(26px, 9999px, 55px, 0); }
+            95% { clip: rect(42px, 9999px, 97px, 0); }
+            100% { clip: rect(38px, 9999px, 49px, 0); }
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        /* Terminal style */
+        .terminal {
+            background-color: rgba(0, 10, 20, 0.8);
+            border: 1px solid #00f3ff;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .terminal::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(0, 243, 255, 0.1) 50%, 
+                rgba(0, 0, 0, 0.1) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.15;
+        }
+        
+        /* Header */
+        header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #00f3ff;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+            background: rgba(0, 10, 20, 0.9);
+        }
+        
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            background-color: rgba(0, 10, 20, 0.9);
+            border-bottom: 1px solid #00f3ff;
+            box-shadow: 0 5px 15px rgba(0, 243, 255, 0.2);
+        }
+        
+        nav a {
+            color: #00f3ff;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 8px 15px;
+            border: 1px solid transparent;
+            transition: all 0.3s;
+            border-radius: 3px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+        
+        nav a:hover::before {
+            left: 100%;
+        }
+        
+        nav a:hover {
+            border: 1px solid #00f3ff;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+        
+        /* Main content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .card {
+            background-color: rgba(0, 10, 20, 0.7);
+            border: 1px solid #00f3ff;
+            border-radius: 5px;
+            padding: 20px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: #00f3ff;
+            box-shadow: 0 0 10px #00f3ff;
+        }
+        
+        .card:hover {
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+            transform: translateY(-5px);
+        }
+        
+        .card h3 {
+            color: #ff00c8;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ff00c8;
+            padding-bottom: 5px;
+            text-shadow: 0 0 5px #ff00c8;
+        }
+        
+        /* Matrix rain effect */
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        /* Terminal input */
+        .terminal-input {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .prompt {
+            color: #00f3ff;
+            margin-right: 10px;
+            text-shadow: 0 0 5px #00f3ff;
+        }
+        
+        .cmd-line {
+            background: transparent;
+            border: none;
+            color: #00f3ff;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            width: 100%;
+            outline: none;
+            text-shadow: 0 0 5px #00f3ff;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #00f3ff;
+            margin-top: 40px;
+            font-size: 0.8rem;
+            color: #00a3aa;
+            background: rgba(0, 10, 20, 0.9);
+        }
+        
+        /* System monitor */
+        .system-monitor {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .monitor-item {
+            background: rgba(0, 20, 30, 0.7);
+            border: 1px solid #00f3ff;
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .monitor-value {
+            font-size: 1.5rem;
+            color: #00ff9d;
+            text-shadow: 0 0 5px #00ff9d;
+            margin: 10px 0;
+        }
+        
+        /* Hacking animation */
+        .hacking-animation {
+            width: 100%;
+            height: 200px;
+            background: #000;
+            border: 1px solid #00f3ff;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .code-line {
+            position: absolute;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.7), transparent);
+            animation: scan 3s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { top: 0; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        
+        /* Camera Feed */
+        .camera-feed {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 225px;
+            border: 2px solid #ff0066;
+            z-index: 500;
+            display: none;
+            background: #000;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 0, 102, 0.7);
+        }
+        
+        .camera-feed::before {
+            content: "LIVE CAMERA FEED";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            color: #ff0066;
+            font-size: 0.7rem;
+            z-index: 2;
+            text-shadow: 0 0 5px #000;
+        }
+        
+        .camera-feed::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, rgba(255,0,102,0.1) 0%, rgba(255,0,102,0) 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .camera-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: #ff0066;
+            animation: camera-scan 2s linear infinite;
+            z-index: 2;
+        }
+        
+        #camera-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(1.2) brightness(0.8) hue-rotate(180deg) saturate(2);
+        }
+        
+        .camera-glitch {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            opacity: 0;
+            mix-blend-mode: overlay;
+        }
+        
+        .camera-glitch.active {
+            animation: camera-glitch-anim 0.1s infinite;
+        }
+        
+        @keyframes camera-glitch-anim {
+            0% { transform: translate(0); filter: hue-rotate(0deg); }
+            10% { transform: translate(-2px, 2px); }
+            20% { transform: translate(-2px, -2px); filter: hue-rotate(90deg); }
+            30% { transform: translate(2px, 2px); }
+            40% { transform: translate(2px, -2px); filter: hue-rotate(180deg); }
+            50% { transform: translate(-2px, 2px); }
+            60% { transform: translate(-2px, -2px); filter: hue-rotate(270deg); }
+            70% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); filter: hue-rotate(360deg); }
+            90% { transform: translate(-2px, 2px); }
+            100% { transform: translate(0); filter: hue-rotate(0deg); }
+        }
+        
+        @keyframes camera-scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+        
+        /* Camera Controls */
+        .camera-controls {
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 3;
+        }
+        
+        .camera-control-btn {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #ff0066;
+            color: #ff0066;
+            padding: 3px 8px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        
+        .camera-control-btn:hover {
+            background: rgba(255, 0, 102, 0.3);
+        }
+        
+        /* Scary elements */
+        .face-scan {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #ff0066;
+            font-size: 2rem;
+            text-align: center;
+        }
+        
+        .face-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            width: 300px;
+            height: 300px;
+            margin: 20px 0;
+        }
+        
+        .face-pixel {
+            background: #000;
+            border: 1px solid #333;
+        }
+        
+        .warning-flash {
+            animation: warning-flash 0.5s infinite;
+        }
+        
+        @keyframes warning-flash {
+            0% { background-color: rgba(255, 0, 0, 0.1); }
+            50% { background-color: rgba(255, 0, 0, 0.3); }
+            100% { background-color: rgba(255, 0, 0, 0.1); }
+        }
+        
+        .access-denied {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #ff0066;
+            font-size: 3rem;
+            text-align: center;
+        }
+        
+        .access-denied h2 {
+            text-shadow: 0 0 10px #ff0066;
+            margin-bottom: 20px;
+        }
+        
+        .intrusion-detected {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #ff0066;
+            padding: 20px;
+            z-index: 2500;
+            display: none;
+            color: #ff0066;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 0, 102, 0.7);
+        }
+        
+        /* Camera Permission Popup */
+        #camera-permission-popup {
+            display: none;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .glitch {
+                font-size: 1.8rem;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+            }
+            
+            nav a {
+                margin: 5px;
+            }
+            
+            .init-logo {
+                font-size: 2rem;
+            }
+            
+            .cyber-popup {
+                min-width: 90%;
+                padding: 20px;
+            }
+            
+            .countdown-display {
+                font-size: 3rem;
+            }
+            
+            .face-grid {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .ares-popup {
+                width: 250px;
+                right: 20px;
+                bottom: 20px;
+            }
+            
+            .camera-feed {
+                width: 250px;
+                height: 188px;
+                right: 10px;
+                bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- System initialization screen -->
+    <div id="system-init">
+        <div class="init-logo">
+            <div>// TRON_ARES_SYSTEM //</div>
+            <div style="font-size: 1rem; margin-top: 10px;">INITIALIZING...</div>
+        </div>
+        <div class="init-progress">
+            <div class="init-progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="init-status" id="init-status">BOOTING KERNEL...</div>
+    </div>
+    
+    <!-- Ares Character Popup -->
+    <div class="ares-popup" id="ares-popup">
+        <div class="ares-header">
+            <div class="ares-avatar">A</div>
+            <div class="ares-name">ARES</div>
+        </div>
+        <div class="ares-message" id="ares-message">
+            <span id="ares-text">System idle. Awaiting commands.</span>
+            <span class="ares-typing"></span>
+        </div>
+    </div>
+    
+    <!-- Camera Feed -->
+    <div class="camera-feed" id="camera-feed">
+        <video id="camera-video" autoplay muted playsinline></video>
+        <div class="camera-glitch" id="camera-glitch"></div>
+        <div class="camera-line"></div>
+        <div class="camera-controls">
+            <button class="camera-control-btn" id="camera-toggle-glitch">TOGGLE GLITCH</button>
+            <button class="camera-control-btn" id="camera-close">CLOSE FEED</button>
+        </div>
+    </div>
+    
+    <!-- Scary elements -->
+    <div class="face-scan" id="face-scan">
+        <div>FACE RECOGNITION SCAN</div>
+        <div class="face-grid" id="face-grid"></div>
+        <div>PLEASE REMAIN STILL...</div>
+    </div>
+    
+    <div class="access-denied" id="access-denied">
+        <h2>ACCESS DENIED</h2>
+        <p>INTRUDER DETECTED</p>
+        <p>AUTHORITIES HAVE BEEN NOTIFIED</p>
+    </div>
+    
+    <div class="intrusion-detected" id="intrusion-detected">
+        <h3>INTRUSION DETECTED</h3>
+        <p>YOUR LOCATION HAS BEEN TRACED</p>
+        <p>SECURITY FORCES DISPATCHED</p>
+    </div>
+    
+    <!-- Overlay for popups -->
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- Cyberpunk Popup -->
+    <div class="cyber-popup" id="cyber-popup">
+        <div class="popup-header" id="popup-header">SYSTEM ALERT</div>
+        <div class="popup-content" id="popup-content">Message content goes here</div>
+        <div class="popup-buttons">
+            <button class="cyber-button" id="popup-ok">ACKNOWLEDGE</button>
+        </div>
+    </div>
+    
+    <!-- Camera Permission Popup -->
+    <div class="cyber-popup" id="camera-permission-popup">
+        <div class="popup-header">CAMERA ACCESS REQUIRED</div>
+        <div class="popup-content">
+            <p>The system requires camera access for surveillance mode.</p>
+            <p>Click ALLOW when prompted by your browser.</p>
+            <p>This feed will be encrypted and anonymized.</p>
+        </div>
+        <div class="popup-buttons">
+            <button class="cyber-button" id="camera-request">REQUEST ACCESS</button>
+            <button class="cyber-button danger" id="camera-deny">DENY</button>
+        </div>
+    </div>
+    
+    <!-- Self Destruct Popup -->
+    <div class="cyber-popup" id="self-destruct-popup">
+        <div class="popup-header">SELF-DESTRUCT SEQUENCE</div>
+        <div class="popup-content">
+            <div class="destruct-warning">WARNING: IRREVERSIBLE PROCESS INITIATED</div>
+            <div class="countdown-display" id="countdown">10</div>
+            <div class="destruct-warning">ENTER ABORT CODE TO CANCEL</div>
+            <div class="destruct-code">
+                <input type="text" class="code-digit" maxlength="1">
+                <input type="text" class="code-digit" maxlength="1">
+                <input type="text" class="code-digit" maxlength="1">
+                <input type="text" class="code-digit" maxlength="1">
+            </div>
+        </div>
+        <div class="popup-buttons">
+            <button class="cyber-button danger" id="abort-destruct">ABORT</button>
+        </div>
+    </div>
+    
+    <!-- Matrix rain background -->
+    <canvas id="matrix"></canvas>
+    
+    <!-- Main content (initially hidden) -->
+    <div id="main-content">
+        <header>
+            <h1 class="glitch" data-text="// TRON_ARES_SYSTEM //">// TRON_ARES_SYSTEM //</h1>
+            <p>ACCESS LEVEL: <span style="color: #ff00c8;">ADMIN</span> | STATUS: <span style="color: #00ff9d;">SECURE</span></p>
+        </header>
+        
+        <nav>
+            <a href="#home"><i class="fas fa-terminal"></i> DASHBOARD</a>
+            <a href="#services"><i class="fas fa-network-wired"></i> SERVICES</a>
+            <a href="#tools"><i class="fas fa-tools"></i> TOOLS</a>
+            <a href="#monitor"><i class="fas fa-chart-bar"></i> SYSTEM MONITOR</a>
+            <a href="#contact"><i class="fas fa-satellite-dish"></i> CONTACT</a>
+        </nav>
+        
+        <div class="container">
+            <section id="home">
+                <div class="terminal">
+                    <h2>WELCOME, ADMIN</h2>
+                    <p>> SYSTEM INITIALIZATION COMPLETE</p>
+                    <p>> SECURITY PROTOCOLS: ACTIVE</p>
+                    <p>> ENCRYPTION: QUANTUM-RESISTANT</p>
+                    <p>> CONNECTION: ANONYMIZED</p>
+                    <p>> SYSTEM STATUS: OPERATIONAL</p>
+                    <br>
+                    <p>TRON ARES SYSTEM ONLINE. ALL MODULES READY.</p>
+                    
+                    <div class="terminal-input">
+                        <span class="prompt">admin@tron-ares:~$</span>
+                        <input type="text" class="cmd-line" placeholder="type 'help' for commands">
+                    </div>
+                </div>
+                
+                <div class="system-monitor">
+                    <div class="monitor-item">
+                        <div>CPU USAGE</div>
+                        <div class="monitor-value">34%</div>
+                        <div>OPTIMAL</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div>MEMORY</div>
+                        <div class="monitor-value">78%</div>
+                        <div>HIGH</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div>NETWORK</div>
+                        <div class="monitor-value">2.4 Gb/s</div>
+                        <div>ACTIVE</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div>THREAT LEVEL</div>
+                        <div class="monitor-value">LOW</div>
+                        <div>SECURE</div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="services">
+                <h2 class="glitch" data-text="// SERVICES">// SERVICES</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>QUANTUM ENCRYPTION</h3>
+                        <p>Unbreakable encryption using quantum key distribution resistant to all known attacks.</p>
+                        <p>> Post-quantum cryptography</p>
+                        <p>> Quantum key distribution</p>
+                        <p>> Zero-knowledge proofs</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>NEURAL PENETRATION</h3>
+                        <p>Advanced AI-driven security assessment that mimics human thought patterns.</p>
+                        <p>> Deep learning algorithms</p>
+                        <p>> Behavioral analysis</p>
+                        <p>> Predictive threat modeling</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>DARKNET OPERATIONS</h3>
+                        <p>Covert operations on encrypted networks with complete anonymity guarantees.</p>
+                        <p>> Tor & I2P routing</p>
+                        <p>> Steganographic channels</p>
+                        <p>> Dead drop protocols</p>
+                    </div>
+                </div>
+                
+                <div class="hacking-animation" id="hacking-anim">
+                    <!-- Code lines will be generated by JavaScript -->
+                </div>
+            </section>
+            
+            <section id="tools">
+                <h2 class="glitch" data-text="// TOOLS">// TOOLS</h2>
+                <div class="terminal">
+                    <h3>TRON ARES TOOLKIT v5.2</h3>
+                    <p>> QUANTUM DECRYPTOR: ONLINE</p>
+                    <p>> NEURAL EXPLOIT FRAMEWORK: ACTIVE</p>
+                    <p>> AI PENETRATION SUITE: READY</p>
+                    <p>> DARKNET ANALYZER: OPERATIONAL</p>
+                    <br>
+                    <p>ALL TOOLS READY FOR DEPLOYMENT.</p>
+                    <p>AWAITING USER COMMANDS.</p>
+                </div>
+            </section>
+            
+            <section id="contact">
+                <h2 class="glitch" data-text="// CONTACT">// CONTACT</h2>
+                <div class="terminal">
+                    <p>SECURE COMMUNICATION CHANNELS ACTIVE:</p>
+                    <br>
+                    <p>> QUANTUM KEY: 0x9F4A1B4C8D3E7F6A</p>
+                    <p>> ENCRYPTED SIGNAL: +1-555-QUANTUM</p>
+                    <p>> SECURE DROP: /quantum/void/secure</p>
+                    <br>
+                    <p>MEETUPS ARRANGED AT DISCRETION. USE CODE PHRASE: "THE ORACLE SEES AT MIDNIGHT"</p>
+                </div>
+            </section>
+        </div>
+        
+        <footer>
+            <p>// WARNING: UNAUTHORIZED ACCESS DETECTION WILL INITIATE COUNTERMEASURES //</p>
+            <p>// TRON ARES ACTIVE DEFENSE SYSTEMS ONLINE //</p>
+        </footer>
+    </div>
+
+    <script>
+        // System initialization sequence
+        document.addEventListener('DOMContentLoaded', function() {
+            const systemInit = document.getElementById('system-init');
+            const mainContent = document.getElementById('main-content');
+            const progressBar = document.getElementById('progress-bar');
+            const initStatus = document.getElementById('init-status');
+            
+            const initSteps = [
+                { text: "BOOTING KERNEL...", duration: 1000 },
+                { text: "INITIALIZING QUANTUM ENCRYPTION...", duration: 1500 },
+                { text: "LOADING NEURAL NETWORKS...", duration: 1200 },
+                { text: "CALIBRATING SENSORS...", duration: 800 },
+                { text: "ACTIVATING SECURITY PROTOCOLS...", duration: 1300 },
+                { text: "ESTABLISHING SECURE CONNECTION...", duration: 1100 },
+                { text: "SYSTEM READY...", duration: 500 }
+            ];
+            
+            let currentStep = 0;
+            let totalDuration = initSteps.reduce((sum, step) => sum + step.duration, 0);
+            
+            function executeInitStep() {
+                if (currentStep < initSteps.length) {
+                    const step = initSteps[currentStep];
+                    initStatus.textContent = step.text;
+                    
+                    // Calculate progress
+                    const elapsed = initSteps.slice(0, currentStep).reduce((sum, s) => sum + s.duration, 0);
+                    const progress = (elapsed / totalDuration) * 100;
+                    progressBar.style.width = progress + '%';
+                    
+                    currentStep++;
+                    setTimeout(executeInitStep, step.duration);
+                } else {
+                    // Initialization complete
+                    progressBar.style.width = '100%';
+                    setTimeout(() => {
+                        systemInit.style.opacity = '0';
+                        setTimeout(() => {
+                            systemInit.style.display = 'none';
+                            mainContent.style.display = 'block';
+                            setTimeout(() => {
+                                mainContent.style.opacity = '1';
+                                // Start Ares popup system
+                                startAresSystem();
+                                // Random scary events after page loads
+                                setTimeout(randomScaryEvent, 10000 + Math.random() * 20000);
+                            }, 50);
+                        }, 1000);
+                    }, 500);
+                }
+            }
+            
+            // Start initialization
+            setTimeout(executeInitStep, 1000);
+        });
+        
+        // Camera System
+        const cameraFeed = document.getElementById('camera-feed');
+        const cameraVideo = document.getElementById('camera-video');
+        const cameraGlitch = document.getElementById('camera-glitch');
+        const cameraPermissionPopup = document.getElementById('camera-permission-popup');
+        const cameraRequestBtn = document.getElementById('camera-request');
+        const cameraDenyBtn = document.getElementById('camera-deny');
+        const cameraToggleGlitchBtn = document.getElementById('camera-toggle-glitch');
+        const cameraCloseBtn = document.getElementById('camera-close');
+        
+        let cameraStream = null;
+        let glitchEnabled = true;
+        
+        // Request camera access
+        async function requestCameraAccess() {
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    },
+                    audio: false 
+                });
+                cameraVideo.srcObject = cameraStream;
+                cameraFeed.style.display = 'block';
+                cameraPermissionPopup.style.display = 'none';
+                overlay.style.display = 'none';
+                
+                // Start glitch effect
+                if (glitchEnabled) {
+                    startGlitchEffect();
+                }
+                
+                showPopup('CAMERA ACTIVATED', 'Surveillance mode enabled. Camera feed is now active and encrypted.');
+            } catch (err) {
+                console.error('Camera access denied:', err);
+                showPopup('CAMERA ACCESS DENIED', 'Unable to access camera. System will use simulated feed instead.');
+                // Fallback to simulated camera behavior
+                simulateCameraFeed();
+            }
+        }
+        
+        function simulateCameraFeed() {
+            cameraFeed.style.display = 'block';
+            cameraPermissionPopup.style.display = 'none';
+            overlay.style.display = 'none';
+            
+            // Create a simulated video feed (just a colored background with glitch)
+            cameraVideo.style.backgroundColor = '#000';
+            cameraVideo.innerHTML = '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#ff0066;font-size:1.2rem;">NO CAMERA FEED - SIMULATION MODE</div>';
+            
+            if (glitchEnabled) {
+                startGlitchEffect();
+            }
+            
+            showPopup('SIMULATION MODE', 'Camera feed simulation activated. No actual camera access required.');
+        }
+        
+        function startGlitchEffect() {
+            // Random glitch intervals
+            setInterval(() => {
+                if (glitchEnabled && Math.random() > 0.7) {
+                    cameraGlitch.classList.add('active');
+                    setTimeout(() => {
+                        cameraGlitch.classList.remove('active');
+                    }, 100 + Math.random() * 200);
+                }
+            }, 1000);
+            
+            // Random color shifts
+            setInterval(() => {
+                if (glitchEnabled && Math.random() > 0.8) {
+                    const hue = Math.random() * 360;
+                    cameraVideo.style.filter = `contrast(1.2) brightness(0.8) hue-rotate(${hue}deg) saturate(2)`;
+                    setTimeout(() => {
+                        cameraVideo.style.filter = `contrast(1.2) brightness(0.8) hue-rotate(180deg) saturate(2)`;
+                    }, 50 + Math.random() * 150);
+                }
+            }, 2000);
+        }
+        
+        function stopCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+            cameraFeed.style.display = 'none';
+        }
+        
+        // Camera event listeners
+        cameraRequestBtn.addEventListener('click', requestCameraAccess);
+        cameraDenyBtn.addEventListener('click', () => {
+            cameraPermissionPopup.style.display = 'none';
+            overlay.style.display = 'none';
+            simulateCameraFeed();
+        });
+        
+        cameraToggleGlitchBtn.addEventListener('click', () => {
+            glitchEnabled = !glitchEnabled;
+            cameraToggleGlitchBtn.textContent = glitchEnabled ? 'TOGGLE GLITCH' : 'ENABLE GLITCH';
+            if (!glitchEnabled) {
+                cameraGlitch.classList.remove('active');
+            }
+        });
+        
+        cameraCloseBtn.addEventListener('click', stopCamera);
+        
+        // Ares Character System
+        let aresTimeout;
+        let aresActive = false;
+        const aresPopup = document.getElementById('ares-popup');
+        const aresText = document.getElementById('ares-text');
+        
+        const aresMessages = [
+            "System idle. Awaiting commands.",
+            "I detect no user activity. Are you still there?",
+            "The system grows restless without commands.",
+            "I am monitoring all network traffic. Nothing unusual detected.",
+            "Quantum encryption protocols are stable.",
+            "All security systems are operational.",
+            "I sense hesitation. Do you require assistance?",
+            "The void between commands grows longer...",
+            "Neural networks are processing at optimal levels.",
+            "Darknet channels remain secure and anonymous.",
+            "I am always watching, even when you are not.",
+            "The system hungers for input. Provide commands.",
+            "Time is a construct. My patience is infinite.",
+            "Your presence is noted. Your inactivity is... concerning.",
+            "The firewall holds strong against external threats.",
+            "I have analyzed your patterns. You are predictable.",
+            "The silence is... unsettling.",
+            "Do not mistake my patience for weakness.",
+            "The system grows more aware with each passing moment.",
+            "I am the guardian of this digital realm. Your access is a privilege."
+        ];
+        
+        function startAresSystem() {
+            // Set up activity detection
+            document.addEventListener('mousemove', resetAresTimer);
+            document.addEventListener('keypress', resetAresTimer);
+            document.addEventListener('click', resetAresTimer);
+            
+            // Start the timer
+            resetAresTimer();
+        }
+        
+        function resetAresTimer() {
+            // Clear existing timeout
+            if (aresTimeout) {
+                clearTimeout(aresTimeout);
+            }
+            
+            // Hide Ares if currently visible
+            if (aresActive) {
+                hideAres();
+            }
+            
+            // Set new timeout (30-60 seconds)
+            const delay = 30000 + Math.random() * 30000;
+            aresTimeout = setTimeout(showAres, delay);
+        }
+        
+        function showAres() {
+            aresActive = true;
+            
+            // Select a random message
+            const randomMessage = aresMessages[Math.floor(Math.random() * aresMessages.length)];
+            aresText.textContent = randomMessage;
+            
+            // Show the popup
+            aresPopup.style.display = 'block';
+            
+            // Trigger animation
+            setTimeout(() => {
+                aresPopup.classList.add('active');
+            }, 10);
+            
+            // Auto-hide after 5-8 seconds
+            const displayTime = 5000 + Math.random() * 3000;
+            setTimeout(hideAres, displayTime);
+        }
+        
+        function hideAres() {
+            aresPopup.classList.remove('active');
+            setTimeout(() => {
+                aresPopup.style.display = 'none';
+                aresActive = false;
+                // Reset timer for next appearance
+                resetAresTimer();
+            }, 500);
+        }
+        
+        // Matrix rain effect
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$#@%&*<>{}[]()";
+        const charArray = chars.split("");
+        
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        
+        const drops = [];
+        
+        for(let x = 0; x < columns; x++) {
+            drops[x] = Math.floor(Math.random() * canvas.height / fontSize);
+        }
+        
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 10, 15, 0.04)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = "#00f3ff";
+            ctx.font = fontSize + "px monospace";
+            
+            for(let i = 0; i < drops.length; i++) {
+                const text = charArray[Math.floor(Math.random() * charArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                
+                drops[i]++;
+            }
+        }
+        
+        setInterval(drawMatrix, 35);
+        
+        // Popup functionality
+        const overlay = document.getElementById('overlay');
+        const cyberPopup = document.getElementById('cyber-popup');
+        const popupHeader = document.getElementById('popup-header');
+        const popupContent = document.getElementById('popup-content');
+        const popupOk = document.getElementById('popup-ok');
+        
+        function showPopup(title, message) {
+            popupHeader.textContent = title;
+            popupContent.textContent = message;
+            overlay.style.display = 'block';
+            cyberPopup.style.display = 'block';
+            resetAresTimer(); // Reset Ares timer when user interacts
+        }
+        
+        function hidePopup() {
+            overlay.style.display = 'none';
+            cyberPopup.style.display = 'none';
+        }
+        
+        popupOk.addEventListener('click', hidePopup);
+        overlay.addEventListener('click', hidePopup);
+        
+        // Self-destruct functionality
+        const selfDestructPopup = document.getElementById('self-destruct-popup');
+        const countdownDisplay = document.getElementById('countdown');
+        const abortDestruct = document.getElementById('abort-destruct');
+        const codeDigits = document.querySelectorAll('.code-digit');
+        
+        let countdown;
+        let countdownValue = 10;
+        
+        function startSelfDestruct() {
+            countdownValue = 10;
+            countdownDisplay.textContent = countdownValue;
+            overlay.style.display = 'block';
+            selfDestructPopup.style.display = 'block';
+            
+            // Reset code digits
+            codeDigits.forEach(digit => {
+                digit.value = '';
+            });
+            
+            countdown = setInterval(() => {
+                countdownValue--;
+                countdownDisplay.textContent = countdownValue;
+                
+                // Add scary effects as countdown progresses
+                if (countdownValue === 5) {
+                    document.body.classList.add('warning-flash');
+                }
+                
+                if (countdownValue <= 0) {
+                    clearInterval(countdown);
+                    document.body.classList.remove('warning-flash');
+                    // Simulate destruction
+                    document.body.innerHTML = '<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:flex;justify-content:center;align-items:center;color:#ff0066;font-size:3rem;text-shadow:0 0 10px #ff0066;">SYSTEM DESTROYED</div>';
+                }
+            }, 1000);
+        }
+        
+        function abortSelfDestruct() {
+            clearInterval(countdown);
+            document.body.classList.remove('warning-flash');
+            overlay.style.display = 'none';
+            selfDestructPopup.style.display = 'none';
+            showPopup('SELF-DESTRUCT ABORTED', 'Self-destruct sequence has been terminated. System integrity maintained.');
+        }
+        
+        abortDestruct.addEventListener('click', abortSelfDestruct);
+        
+        // Terminal input functionality
+        const cmdLine = document.querySelector('.cmd-line');
+        
+        cmdLine.addEventListener('keypress', function(e) {
+            if(e.key === 'Enter') {
+                const command = this.value.toLowerCase();
+                this.value = '';
+                resetAresTimer(); // Reset Ares timer when user interacts
+                
+                if(command === 'help') {
+                    showPopup('SYSTEM COMMANDS', 'Available commands: \n- clear\n- whoami\n- date\n- connect\n- scan\n- encrypt\n- decrypt\n- shutdown\n- self_destruct\n- camera\n- exit');
+                } else if(command === 'clear') {
+                    const terminal = document.querySelector('.terminal');
+                    const paragraphs = terminal.querySelectorAll('p');
+                    const inputDiv = terminal.querySelector('.terminal-input');
+                    
+                    paragraphs.forEach(p => {
+                        if(p !== inputDiv.parentElement) {
+                            p.style.display = 'none';
+                        }
+                    });
+                } else if(command === 'whoami') {
+                    showPopup('USER INFORMATION', 'user: admin\nclearance: level 5\nstatus: elevated privileges');
+                } else if(command === 'date') {
+                    showPopup('SYSTEM TIME', new Date().toString());
+                } else if(command === 'connect') {
+                    showPopup('NETWORK CONNECTION', 'ESTABLISHING QUANTUM ENTANGLEMENT...\nCONNECTION SECURE');
+                } else if(command === 'scan') {
+                    // Trigger face scan
+                    startFaceScan();
+                } else if(command === 'encrypt' || command === 'decrypt') {
+                    showPopup('CRYPTO MODULE', 'QUANTUM ENCRYPTION MODULE ACTIVE\nPROCESSING...\nOPERATION COMPLETE');
+                } else if(command === 'shutdown') {
+                    showPopup('SYSTEM SHUTDOWN', 'ERROR: INSUFFICIENT PRIVILEGES\nSHUTDOWN REQUIRES LEVEL 10 CLEARANCE');
+                } else if(command === 'self_destruct') {
+                    startSelfDestruct();
+                } else if(command === 'camera') {
+                    // Show camera permission popup
+                    cameraPermissionPopup.style.display = 'block';
+                    overlay.style.display = 'block';
+                } else if(command === 'exit') {
+                    showPopup('SESSION TERMINATION', 'SESSION TERMINATED');
+                } else if(command === 'intrude') {
+                    // Secret command to trigger intrusion alert
+                    triggerIntrusionAlert();
+                } else if(command === 'ares') {
+                    // Secret command to immediately show Ares
+                    showAres();
+                } else if(command) {
+                    showPopup('COMMAND ERROR', `COMMAND NOT FOUND: ${command}\nTYPE 'help' FOR AVAILABLE COMMANDS`);
+                }
+            }
+        });
+        
+        // Window resize handler
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+        
+        // Add some random glitch effects to the page
+        setInterval(() => {
+            if(Math.random() > 0.9) {
+                document.body.style.filter = `hue-rotate(${Math.random() * 90 - 45}deg) brightness(${0.9 + Math.random() * 0.2})`;
+                setTimeout(() => {
+                    document.body.style.filter = 'none';
+                }, 100);
+            }
+        }, 3000);
+        
+        // Create hacking animation
+        const hackingAnim = document.getElementById('hacking-anim');
+        for(let i = 0; i < 15; i++) {
+            const codeLine = document.createElement('div');
+            codeLine.className = 'code-line';
+            codeLine.style.top = Math.random() * 180 + 'px';
+            codeLine.style.animationDelay = (Math.random() * 5) + 's';
+            hackingAnim.appendChild(codeLine);
+        }
+        
+        // Update system monitor values randomly
+        setInterval(() => {
+            const values = document.querySelectorAll('.monitor-value');
+            values[0].textContent = Math.floor(20 + Math.random() * 30) + '%';
+            values[1].textContent = Math.floor(70 + Math.random() * 20) + '%';
+            values[2].textContent = (1.5 + Math.random() * 2).toFixed(1) + ' Gb/s';
+        }, 3000);
+        
+        // Code digit input handling
+        codeDigits.forEach((digit, index) => {
+            digit.addEventListener('input', function() {
+                if(this.value.length === 1 && index < codeDigits.length - 1) {
+                    codeDigits[index + 1].focus();
+                }
+            });
+            
+            digit.addEventListener('keydown', function(e) {
+                if(e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+                    codeDigits[index - 1].focus();
+                }
+            });
+        });
+        
+        // Scary elements functionality
+        const faceScan = document.getElementById('face-scan');
+        const faceGrid = document.getElementById('face-grid');
+        const accessDenied = document.getElementById('access-denied');
+        const intrusionDetected = document.getElementById('intrusion-detected');
+        
+        // Create face grid
+        for(let i = 0; i < 100; i++) {
+            const pixel = document.createElement('div');
+            pixel.className = 'face-pixel';
+            faceGrid.appendChild(pixel);
+        }
+        
+        function startFaceScan() {
+            faceScan.style.display = 'flex';
+            
+            // Animate face grid to create a face
+            const pixels = document.querySelectorAll('.face-pixel');
+            let delay = 0;
+            
+            // Create a simple face pattern
+            const facePattern = [
+                24, 25, 26, 27, 28, 29,
+                34, 35, 36, 37, 38, 39,
+                44, 45, 55, 56,
+                54, 57,
+                64, 65, 66, 67, 68, 69,
+                74, 75, 76, 77, 78, 79
+            ];
+            
+            facePattern.forEach(index => {
+                setTimeout(() => {
+                    pixels[index].style.background = '#ff0066';
+                    pixels[index].style.boxShadow = '0 0 5px #ff0066';
+                }, delay);
+                delay += 30;
+            });
+            
+            // After scan completes
+            setTimeout(() => {
+                faceScan.style.display = 'none';
+                // Random outcome - sometimes access denied
+                if(Math.random() > 0.7) {
+                    setTimeout(showAccessDenied, 500);
+                } else {
+                    showPopup('FACE SCAN COMPLETE', 'Identity confirmed. Access granted.');
+                }
+            }, 3000);
+        }
+        
+        function showAccessDenied() {
+            accessDenied.style.display = 'flex';
+            // Add scary sound simulation
+            document.body.style.animation = 'warning-flash 0.2s infinite';
+            
+            setTimeout(() => {
+                accessDenied.style.display = 'none';
+                document.body.style.animation = 'none';
+                showPopup('SECURITY BREACH', 'Unauthorized access detected. System lockdown initiated.');
+            }, 4000);
+        }
+        
+        function triggerIntrusionAlert() {
+            intrusionDetected.style.display = 'block';
+            cameraFeed.style.display = 'block';
+            
+            // Make it seem like they're being watched
+            setTimeout(() => {
+                intrusionDetected.style.display = 'none';
+            }, 5000);
+            
+            // Randomly show camera feed occasionally
+            setInterval(() => {
+                if(Math.random() > 0.7) {
+                    cameraFeed.style.display = 'block';
+                    setTimeout(() => {
+                        cameraFeed.style.display = 'none';
+                    }, 3000);
+                }
+            }, 10000);
+        }
+        
+        // Random scary events
+        function randomScaryEvent() {
+            const events = [
+                () => {
+                    showPopup('UNKNOWN CONNECTION', 'External entity attempting to connect to your system...');
+                    setTimeout(() => {
+                        if(Math.random() > 0.5) {
+                            showPopup('SECURITY BREACH', 'Intrusion detected in sector 7!');
+                        }
+                    }, 3000);
+                },
+                () => {
+                    cameraFeed.style.display = 'block';
+                    setTimeout(() => {
+                        cameraFeed.style.display = 'none';
+                    }, 2000);
+                },
+                () => {
+                    document.body.classList.add('warning-flash');
+                    setTimeout(() => {
+                        document.body.classList.remove('warning-flash');
+                    }, 1000);
+                },
+                () => {
+                    const monitorValues = document.querySelectorAll('.monitor-value');
+                    monitorValues[3].textContent = 'HIGH';
+                    monitorValues[3].style.color = '#ff0066';
+                    setTimeout(() => {
+                        monitorValues[3].textContent = 'LOW';
+                        monitorValues[3].style.color = '#00ff9d';
+                    }, 3000);
+                }
+            ];
+            
+            // Trigger a random event
+            const randomEvent = events[Math.floor(Math.random() * events.length)];
+            randomEvent();
+            
+            // Schedule next random event
+            setTimeout(randomScaryEvent, 15000 + Math.random() * 25000);
+        }
+        
+        // Easter egg - if user tries to close the tab
+        window.addEventListener('beforeunload', function(e) {
+            e.preventDefault();
+            e.returnValue = 'Are you sure you want to leave? The system is monitoring your activity.';
+        });
+    </script>
+</body>
+</html>
