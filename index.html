@@ -611,8 +611,8 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 300px;
-            height: 225px;
+            width: 320px;
+            height: 240px;
             border: 2px solid #ff0066;
             z-index: 500;
             display: none;
@@ -660,7 +660,8 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: contrast(1.2) brightness(0.8) hue-rotate(180deg) saturate(2);
+            filter: contrast(1.4) brightness(0.7) hue-rotate(180deg) saturate(2.5);
+            transform: scaleX(-1); /* Mirror the video for more natural feel */
         }
         
         .camera-glitch {
@@ -672,6 +673,7 @@
             background: inherit;
             opacity: 0;
             mix-blend-mode: overlay;
+            pointer-events: none;
         }
         
         .camera-glitch.active {
@@ -679,17 +681,17 @@
         }
         
         @keyframes camera-glitch-anim {
-            0% { transform: translate(0); filter: hue-rotate(0deg); }
+            0% { transform: translate(0); filter: hue-rotate(0deg); opacity: 0.7; }
             10% { transform: translate(-2px, 2px); }
-            20% { transform: translate(-2px, -2px); filter: hue-rotate(90deg); }
+            20% { transform: translate(-2px, -2px); filter: hue-rotate(90deg); opacity: 0.8; }
             30% { transform: translate(2px, 2px); }
-            40% { transform: translate(2px, -2px); filter: hue-rotate(180deg); }
+            40% { transform: translate(2px, -2px); filter: hue-rotate(180deg); opacity: 0.6; }
             50% { transform: translate(-2px, 2px); }
-            60% { transform: translate(-2px, -2px); filter: hue-rotate(270deg); }
+            60% { transform: translate(-2px, -2px); filter: hue-rotate(270deg); opacity: 0.9; }
             70% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); filter: hue-rotate(360deg); }
+            80% { transform: translate(2px, -2px); filter: hue-rotate(360deg); opacity: 0.5; }
             90% { transform: translate(-2px, 2px); }
-            100% { transform: translate(0); filter: hue-rotate(0deg); }
+            100% { transform: translate(0); filter: hue-rotate(0deg); opacity: 0.7; }
         }
         
         @keyframes camera-scan {
@@ -721,6 +723,23 @@
         
         .camera-control-btn:hover {
             background: rgba(255, 0, 102, 0.3);
+        }
+        
+        /* Camera Selection */
+        .camera-selection {
+            position: absolute;
+            top: 25px;
+            right: 5px;
+            z-index: 3;
+        }
+        
+        #camera-select {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #ff0066;
+            color: #ff0066;
+            padding: 2px 5px;
+            font-size: 0.6rem;
+            border-radius: 3px;
         }
         
         /* Scary elements */
@@ -846,8 +865,8 @@
             }
             
             .camera-feed {
-                width: 250px;
-                height: 188px;
+                width: 280px;
+                height: 210px;
                 right: 10px;
                 bottom: 10px;
             }
@@ -884,8 +903,14 @@
         <video id="camera-video" autoplay muted playsinline></video>
         <div class="camera-glitch" id="camera-glitch"></div>
         <div class="camera-line"></div>
+        <div class="camera-selection">
+            <select id="camera-select">
+                <option value="">Select Camera</option>
+            </select>
+        </div>
         <div class="camera-controls">
             <button class="camera-control-btn" id="camera-toggle-glitch">TOGGLE GLITCH</button>
+            <button class="camera-control-btn" id="camera-switch">SWITCH CAMERA</button>
             <button class="camera-control-btn" id="camera-close">CLOSE FEED</button>
         </div>
     </div>
@@ -1142,25 +1167,55 @@
         const cameraFeed = document.getElementById('camera-feed');
         const cameraVideo = document.getElementById('camera-video');
         const cameraGlitch = document.getElementById('camera-glitch');
+        const cameraSelect = document.getElementById('camera-select');
         const cameraPermissionPopup = document.getElementById('camera-permission-popup');
         const cameraRequestBtn = document.getElementById('camera-request');
         const cameraDenyBtn = document.getElementById('camera-deny');
         const cameraToggleGlitchBtn = document.getElementById('camera-toggle-glitch');
+        const cameraSwitchBtn = document.getElementById('camera-switch');
         const cameraCloseBtn = document.getElementById('camera-close');
         
         let cameraStream = null;
         let glitchEnabled = true;
+        let cameras = [];
+        let currentCameraIndex = 0;
+        
+        // Get available cameras
+        async function getCameras() {
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const videoDevices = devices.filter(device => device.kind === 'videoinput');
+                cameras = videoDevices;
+                
+                // Populate camera select
+                cameraSelect.innerHTML = '<option value="">Select Camera</option>';
+                cameras.forEach((camera, index) => {
+                    const option = document.createElement('option');
+                    option.value = camera.deviceId;
+                    option.text = camera.label || `Camera ${index + 1}`;
+                    cameraSelect.appendChild(option);
+                });
+                
+                return videoDevices;
+            } catch (err) {
+                console.error('Error enumerating cameras:', err);
+                return [];
+            }
+        }
         
         // Request camera access
-        async function requestCameraAccess() {
+        async function requestCameraAccess(deviceId = null) {
             try {
-                cameraStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { 
-                        width: { ideal: 640 },
-                        height: { ideal: 480 }
+                const constraints = {
+                    video: {
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        deviceId: deviceId ? { exact: deviceId } : undefined
                     },
-                    audio: false 
-                });
+                    audio: false
+                };
+                
+                cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
                 cameraVideo.srcObject = cameraStream;
                 cameraFeed.style.display = 'block';
                 cameraPermissionPopup.style.display = 'none';
@@ -1172,12 +1227,37 @@
                 }
                 
                 showPopup('CAMERA ACTIVATED', 'Surveillance mode enabled. Camera feed is now active and encrypted.');
+                
+                // Get available cameras after permission is granted
+                await getCameras();
+                
             } catch (err) {
                 console.error('Camera access denied:', err);
                 showPopup('CAMERA ACCESS DENIED', 'Unable to access camera. System will use simulated feed instead.');
                 // Fallback to simulated camera behavior
                 simulateCameraFeed();
             }
+        }
+        
+        // Switch between cameras
+        async function switchCamera() {
+            if (cameras.length <= 1) {
+                showPopup('CAMERA SWITCH', 'Only one camera detected or no cameras available.');
+                return;
+            }
+            
+            currentCameraIndex = (currentCameraIndex + 1) % cameras.length;
+            const nextCamera = cameras[currentCameraIndex];
+            
+            // Stop current stream
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+            }
+            
+            // Start new stream with selected camera
+            await requestCameraAccess(nextCamera.deviceId);
+            
+            showPopup('CAMERA SWITCHED', `Now using: ${nextCamera.label || 'Unknown Camera'}`);
         }
         
         function simulateCameraFeed() {
@@ -1197,8 +1277,16 @@
         }
         
         function startGlitchEffect() {
+            // Clear any existing intervals
+            if (window.glitchInterval) {
+                clearInterval(window.glitchInterval);
+            }
+            if (window.colorInterval) {
+                clearInterval(window.colorInterval);
+            }
+            
             // Random glitch intervals
-            setInterval(() => {
+            window.glitchInterval = setInterval(() => {
                 if (glitchEnabled && Math.random() > 0.7) {
                     cameraGlitch.classList.add('active');
                     setTimeout(() => {
@@ -1208,12 +1296,12 @@
             }, 1000);
             
             // Random color shifts
-            setInterval(() => {
+            window.colorInterval = setInterval(() => {
                 if (glitchEnabled && Math.random() > 0.8) {
-                    const hue = Math.random() * 360;
-                    cameraVideo.style.filter = `contrast(1.2) brightness(0.8) hue-rotate(${hue}deg) saturate(2)`;
+                    const hue = 180 + (Math.random() * 60 - 30); // Base hue with variation
+                    cameraVideo.style.filter = `contrast(1.4) brightness(0.7) hue-rotate(${hue}deg) saturate(2.5)`;
                     setTimeout(() => {
-                        cameraVideo.style.filter = `contrast(1.2) brightness(0.8) hue-rotate(180deg) saturate(2)`;
+                        cameraVideo.style.filter = `contrast(1.4) brightness(0.7) hue-rotate(180deg) saturate(2.5)`;
                     }, 50 + Math.random() * 150);
                 }
             }, 2000);
@@ -1225,10 +1313,18 @@
                 cameraStream = null;
             }
             cameraFeed.style.display = 'none';
+            
+            // Clear glitch intervals
+            if (window.glitchInterval) {
+                clearInterval(window.glitchInterval);
+            }
+            if (window.colorInterval) {
+                clearInterval(window.colorInterval);
+            }
         }
         
         // Camera event listeners
-        cameraRequestBtn.addEventListener('click', requestCameraAccess);
+        cameraRequestBtn.addEventListener('click', () => requestCameraAccess());
         cameraDenyBtn.addEventListener('click', () => {
             cameraPermissionPopup.style.display = 'none';
             overlay.style.display = 'none';
@@ -1240,10 +1336,24 @@
             cameraToggleGlitchBtn.textContent = glitchEnabled ? 'TOGGLE GLITCH' : 'ENABLE GLITCH';
             if (!glitchEnabled) {
                 cameraGlitch.classList.remove('active');
+            } else {
+                startGlitchEffect();
             }
         });
         
+        cameraSwitchBtn.addEventListener('click', switchCamera);
         cameraCloseBtn.addEventListener('click', stopCamera);
+        
+        cameraSelect.addEventListener('change', (e) => {
+            if (e.target.value) {
+                // Stop current stream
+                if (cameraStream) {
+                    cameraStream.getTracks().forEach(track => track.stop());
+                }
+                // Start new stream with selected camera
+                requestCameraAccess(e.target.value);
+            }
+        });
         
         // Ares Character System
         let aresTimeout;
