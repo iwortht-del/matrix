@@ -76,6 +76,42 @@
             transition: opacity 1s;
         }
         
+        /* Audio Controls */
+        .audio-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .audio-btn {
+            background: rgba(0, 10, 20, 0.8);
+            border: 1px solid #00f3ff;
+            color: #00f3ff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+        
+        .audio-btn:hover {
+            background: rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.7);
+        }
+        
+        .audio-btn.muted {
+            color: #ff0066;
+            border-color: #ff0066;
+            box-shadow: 0 0 10px rgba(255, 0, 102, 0.5);
+        }
+        
         /* Ares Character Popup */
         .ares-popup {
             position: fixed;
@@ -870,10 +906,22 @@
                 right: 10px;
                 bottom: 10px;
             }
+            
+            .audio-controls {
+                top: 10px;
+                right: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Audio Controls -->
+    <div class="audio-controls">
+        <button class="audio-btn" id="audio-toggle" title="Toggle Sound">
+            <i class="fas fa-volume-up"></i>
+        </button>
+    </div>
+
     <!-- System initialization screen -->
     <div id="system-init">
         <div class="init-logo">
@@ -1106,7 +1154,111 @@
         </footer>
     </div>
 
+    <!-- Audio Elements -->
+    <audio id="startup-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-bleep-906.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="typing-sound" preload="auto" loop>
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-fast-typing-1111.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="beep-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-retro-arcade-game-interface-341.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="glitch-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-computer-glitch-bleep-1042.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="warning-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-warning-alarm-buzzer-991.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="error-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-negative-notification-265.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="success-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="countdown-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-warning-countdown-bleeps-953.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="ambient-sound" preload="auto" loop>
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-ambience-352.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="scan-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-scanner-beep-982.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="access-denied-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-security-breach-alarm-994.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
+        // Audio System
+        const audioToggle = document.getElementById('audio-toggle');
+        let audioEnabled = true;
+        
+        // Audio elements
+        const startupSound = document.getElementById('startup-sound');
+        const typingSound = document.getElementById('typing-sound');
+        const beepSound = document.getElementById('beep-sound');
+        const glitchSound = document.getElementById('glitch-sound');
+        const warningSound = document.getElementById('warning-sound');
+        const errorSound = document.getElementById('error-sound');
+        const successSound = document.getElementById('success-sound');
+        const countdownSound = document.getElementById('countdown-sound');
+        const ambientSound = document.getElementById('ambient-sound');
+        const scanSound = document.getElementById('scan-sound');
+        const accessDeniedSound = document.getElementById('access-denied-sound');
+        
+        // Set volume levels
+        startupSound.volume = 0.5;
+        typingSound.volume = 0.3;
+        beepSound.volume = 0.4;
+        glitchSound.volume = 0.4;
+        warningSound.volume = 0.6;
+        errorSound.volume = 0.5;
+        successSound.volume = 0.5;
+        countdownSound.volume = 0.7;
+        ambientSound.volume = 0.2;
+        scanSound.volume = 0.5;
+        accessDeniedSound.volume = 0.7;
+        
+        // Audio toggle functionality
+        audioToggle.addEventListener('click', function() {
+            audioEnabled = !audioEnabled;
+            
+            if (audioEnabled) {
+                this.classList.remove('muted');
+                this.innerHTML = '<i class="fas fa-volume-up"></i>';
+                // Resume ambient sound if it was playing
+                if (!ambientSound.paused) {
+                    ambientSound.play();
+                }
+            } else {
+                this.classList.add('muted');
+                this.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                // Pause all sounds
+                pauseAllSounds();
+            }
+        });
+        
+        function playSound(sound) {
+            if (audioEnabled) {
+                sound.currentTime = 0;
+                sound.play().catch(e => console.log('Audio play failed:', e));
+            }
+        }
+        
+        function pauseAllSounds() {
+            const sounds = [
+                startupSound, typingSound, beepSound, glitchSound, 
+                warningSound, errorSound, successSound, countdownSound, 
+                ambientSound, scanSound, accessDeniedSound
+            ];
+            
+            sounds.forEach(sound => {
+                sound.pause();
+                sound.currentTime = 0;
+            });
+        }
+        
         // System initialization sequence
         document.addEventListener('DOMContentLoaded', function() {
             const systemInit = document.getElementById('system-init');
@@ -1114,14 +1266,17 @@
             const progressBar = document.getElementById('progress-bar');
             const initStatus = document.getElementById('init-status');
             
+            // Play startup sound
+            playSound(startupSound);
+            
             const initSteps = [
-                { text: "BOOTING KERNEL...", duration: 1000 },
-                { text: "INITIALIZING QUANTUM ENCRYPTION...", duration: 1500 },
-                { text: "LOADING NEURAL NETWORKS...", duration: 1200 },
-                { text: "CALIBRATING SENSORS...", duration: 800 },
-                { text: "ACTIVATING SECURITY PROTOCOLS...", duration: 1300 },
-                { text: "ESTABLISHING SECURE CONNECTION...", duration: 1100 },
-                { text: "SYSTEM READY...", duration: 500 }
+                { text: "BOOTING KERNEL...", duration: 1000, sound: beepSound },
+                { text: "INITIALIZING QUANTUM ENCRYPTION...", duration: 1500, sound: glitchSound },
+                { text: "LOADING NEURAL NETWORKS...", duration: 1200, sound: beepSound },
+                { text: "CALIBRATING SENSORS...", duration: 800, sound: scanSound },
+                { text: "ACTIVATING SECURITY PROTOCOLS...", duration: 1300, sound: warningSound },
+                { text: "ESTABLISHING SECURE CONNECTION...", duration: 1100, sound: beepSound },
+                { text: "SYSTEM READY...", duration: 500, sound: successSound }
             ];
             
             let currentStep = 0;
@@ -1131,6 +1286,11 @@
                 if (currentStep < initSteps.length) {
                     const step = initSteps[currentStep];
                     initStatus.textContent = step.text;
+                    
+                    // Play step sound
+                    if (step.sound) {
+                        playSound(step.sound);
+                    }
                     
                     // Calculate progress
                     const elapsed = initSteps.slice(0, currentStep).reduce((sum, s) => sum + s.duration, 0);
@@ -1149,6 +1309,8 @@
                             mainContent.style.display = 'block';
                             setTimeout(() => {
                                 mainContent.style.opacity = '1';
+                                // Start ambient sound
+                                playSound(ambientSound);
                                 // Start Ares popup system
                                 startAresSystem();
                                 // Random scary events after page loads
@@ -1221,6 +1383,9 @@
                 cameraPermissionPopup.style.display = 'none';
                 overlay.style.display = 'none';
                 
+                // Play camera activation sound
+                playSound(scanSound);
+                
                 // Start glitch effect
                 if (glitchEnabled) {
                     startGlitchEffect();
@@ -1233,6 +1398,7 @@
                 
             } catch (err) {
                 console.error('Camera access denied:', err);
+                playSound(errorSound);
                 showPopup('CAMERA ACCESS DENIED', 'Unable to access camera. System will use simulated feed instead.');
                 // Fallback to simulated camera behavior
                 simulateCameraFeed();
@@ -1242,12 +1408,16 @@
         // Switch between cameras
         async function switchCamera() {
             if (cameras.length <= 1) {
+                playSound(errorSound);
                 showPopup('CAMERA SWITCH', 'Only one camera detected or no cameras available.');
                 return;
             }
             
             currentCameraIndex = (currentCameraIndex + 1) % cameras.length;
             const nextCamera = cameras[currentCameraIndex];
+            
+            // Play switch sound
+            playSound(beepSound);
             
             // Stop current stream
             if (cameraStream) {
@@ -1289,6 +1459,7 @@
             window.glitchInterval = setInterval(() => {
                 if (glitchEnabled && Math.random() > 0.7) {
                     cameraGlitch.classList.add('active');
+                    playSound(glitchSound);
                     setTimeout(() => {
                         cameraGlitch.classList.remove('active');
                     }, 100 + Math.random() * 200);
@@ -1313,6 +1484,7 @@
                 cameraStream = null;
             }
             cameraFeed.style.display = 'none';
+            playSound(beepSound);
             
             // Clear glitch intervals
             if (window.glitchInterval) {
@@ -1328,12 +1500,14 @@
         cameraDenyBtn.addEventListener('click', () => {
             cameraPermissionPopup.style.display = 'none';
             overlay.style.display = 'none';
+            playSound(errorSound);
             simulateCameraFeed();
         });
         
         cameraToggleGlitchBtn.addEventListener('click', () => {
             glitchEnabled = !glitchEnabled;
             cameraToggleGlitchBtn.textContent = glitchEnabled ? 'TOGGLE GLITCH' : 'ENABLE GLITCH';
+            playSound(beepSound);
             if (!glitchEnabled) {
                 cameraGlitch.classList.remove('active');
             } else {
@@ -1417,6 +1591,9 @@
             const randomMessage = aresMessages[Math.floor(Math.random() * aresMessages.length)];
             aresText.textContent = randomMessage;
             
+            // Play Ares appearance sound
+            playSound(beepSound);
+            
             // Show the popup
             aresPopup.style.display = 'block';
             
@@ -1492,12 +1669,14 @@
             popupContent.textContent = message;
             overlay.style.display = 'block';
             cyberPopup.style.display = 'block';
+            playSound(beepSound);
             resetAresTimer(); // Reset Ares timer when user interacts
         }
         
         function hidePopup() {
             overlay.style.display = 'none';
             cyberPopup.style.display = 'none';
+            playSound(beepSound);
         }
         
         popupOk.addEventListener('click', hidePopup);
@@ -1518,6 +1697,9 @@
             overlay.style.display = 'block';
             selfDestructPopup.style.display = 'block';
             
+            // Play warning sound
+            playSound(warningSound);
+            
             // Reset code digits
             codeDigits.forEach(digit => {
                 digit.value = '';
@@ -1527,14 +1709,22 @@
                 countdownValue--;
                 countdownDisplay.textContent = countdownValue;
                 
+                // Play countdown beep
+                if (countdownValue > 0) {
+                    playSound(countdownSound);
+                }
+                
                 // Add scary effects as countdown progresses
                 if (countdownValue === 5) {
                     document.body.classList.add('warning-flash');
+                    playSound(warningSound);
                 }
                 
                 if (countdownValue <= 0) {
                     clearInterval(countdown);
                     document.body.classList.remove('warning-flash');
+                    // Play destruction sound
+                    playSound(accessDeniedSound);
                     // Simulate destruction
                     document.body.innerHTML = '<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:flex;justify-content:center;align-items:center;color:#ff0066;font-size:3rem;text-shadow:0 0 10px #ff0066;">SYSTEM DESTROYED</div>';
                 }
@@ -1546,6 +1736,7 @@
             document.body.classList.remove('warning-flash');
             overlay.style.display = 'none';
             selfDestructPopup.style.display = 'none';
+            playSound(successSound);
             showPopup('SELF-DESTRUCT ABORTED', 'Self-destruct sequence has been terminated. System integrity maintained.');
         }
         
@@ -1553,16 +1744,37 @@
         
         // Terminal input functionality
         const cmdLine = document.querySelector('.cmd-line');
+        let typingTimer;
+        
+        cmdLine.addEventListener('focus', function() {
+            playSound(typingSound);
+        });
+        
+        cmdLine.addEventListener('blur', function() {
+            typingSound.pause();
+            typingSound.currentTime = 0;
+        });
+        
+        cmdLine.addEventListener('keydown', function() {
+            // Restart typing sound on key press
+            if (audioEnabled && typingSound.paused) {
+                playSound(typingSound);
+            }
+        });
         
         cmdLine.addEventListener('keypress', function(e) {
             if(e.key === 'Enter') {
                 const command = this.value.toLowerCase();
                 this.value = '';
+                typingSound.pause();
+                typingSound.currentTime = 0;
                 resetAresTimer(); // Reset Ares timer when user interacts
                 
                 if(command === 'help') {
+                    playSound(beepSound);
                     showPopup('SYSTEM COMMANDS', 'Available commands: \n- clear\n- whoami\n- date\n- connect\n- scan\n- encrypt\n- decrypt\n- shutdown\n- self_destruct\n- camera\n- exit');
                 } else if(command === 'clear') {
+                    playSound(beepSound);
                     const terminal = document.querySelector('.terminal');
                     const paragraphs = terminal.querySelectorAll('p');
                     const inputDiv = terminal.querySelector('.terminal-input');
@@ -1573,33 +1785,45 @@
                         }
                     });
                 } else if(command === 'whoami') {
+                    playSound(beepSound);
                     showPopup('USER INFORMATION', 'user: admin\nclearance: level 5\nstatus: elevated privileges');
                 } else if(command === 'date') {
+                    playSound(beepSound);
                     showPopup('SYSTEM TIME', new Date().toString());
                 } else if(command === 'connect') {
+                    playSound(scanSound);
                     showPopup('NETWORK CONNECTION', 'ESTABLISHING QUANTUM ENTANGLEMENT...\nCONNECTION SECURE');
                 } else if(command === 'scan') {
                     // Trigger face scan
+                    playSound(scanSound);
                     startFaceScan();
                 } else if(command === 'encrypt' || command === 'decrypt') {
+                    playSound(glitchSound);
                     showPopup('CRYPTO MODULE', 'QUANTUM ENCRYPTION MODULE ACTIVE\nPROCESSING...\nOPERATION COMPLETE');
                 } else if(command === 'shutdown') {
+                    playSound(errorSound);
                     showPopup('SYSTEM SHUTDOWN', 'ERROR: INSUFFICIENT PRIVILEGES\nSHUTDOWN REQUIRES LEVEL 10 CLEARANCE');
                 } else if(command === 'self_destruct') {
+                    playSound(warningSound);
                     startSelfDestruct();
                 } else if(command === 'camera') {
+                    playSound(beepSound);
                     // Show camera permission popup
                     cameraPermissionPopup.style.display = 'block';
                     overlay.style.display = 'block';
                 } else if(command === 'exit') {
+                    playSound(beepSound);
                     showPopup('SESSION TERMINATION', 'SESSION TERMINATED');
                 } else if(command === 'intrude') {
                     // Secret command to trigger intrusion alert
+                    playSound(warningSound);
                     triggerIntrusionAlert();
                 } else if(command === 'ares') {
                     // Secret command to immediately show Ares
+                    playSound(beepSound);
                     showAres();
                 } else if(command) {
+                    playSound(errorSound);
                     showPopup('COMMAND ERROR', `COMMAND NOT FOUND: ${command}\nTYPE 'help' FOR AVAILABLE COMMANDS`);
                 }
             }
@@ -1669,6 +1893,7 @@
         
         function startFaceScan() {
             faceScan.style.display = 'flex';
+            playSound(scanSound);
             
             // Animate face grid to create a face
             const pixels = document.querySelectorAll('.face-pixel');
@@ -1699,6 +1924,7 @@
                 if(Math.random() > 0.7) {
                     setTimeout(showAccessDenied, 500);
                 } else {
+                    playSound(successSound);
                     showPopup('FACE SCAN COMPLETE', 'Identity confirmed. Access granted.');
                 }
             }, 3000);
@@ -1706,6 +1932,7 @@
         
         function showAccessDenied() {
             accessDenied.style.display = 'flex';
+            playSound(accessDeniedSound);
             // Add scary sound simulation
             document.body.style.animation = 'warning-flash 0.2s infinite';
             
@@ -1719,6 +1946,7 @@
         function triggerIntrusionAlert() {
             intrusionDetected.style.display = 'block';
             cameraFeed.style.display = 'block';
+            playSound(warningSound);
             
             // Make it seem like they're being watched
             setTimeout(() => {
@@ -1740,26 +1968,31 @@
         function randomScaryEvent() {
             const events = [
                 () => {
+                    playSound(warningSound);
                     showPopup('UNKNOWN CONNECTION', 'External entity attempting to connect to your system...');
                     setTimeout(() => {
                         if(Math.random() > 0.5) {
+                            playSound(accessDeniedSound);
                             showPopup('SECURITY BREACH', 'Intrusion detected in sector 7!');
                         }
                     }, 3000);
                 },
                 () => {
+                    playSound(glitchSound);
                     cameraFeed.style.display = 'block';
                     setTimeout(() => {
                         cameraFeed.style.display = 'none';
                     }, 2000);
                 },
                 () => {
+                    playSound(warningSound);
                     document.body.classList.add('warning-flash');
                     setTimeout(() => {
                         document.body.classList.remove('warning-flash');
                     }, 1000);
                 },
                 () => {
+                    playSound(beepSound);
                     const monitorValues = document.querySelectorAll('.monitor-value');
                     monitorValues[3].textContent = 'HIGH';
                     monitorValues[3].style.color = '#ff0066';
