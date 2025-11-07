@@ -994,314 +994,320 @@
         </div>
     </div>
     
+    <!-- Self Destruct Popup -->
+    <div class="cyber-popup" id="self-destruct-popup">
+        <div class="popup-header">SELF DESTRUCT INITIATED</div>
+        <div class="countdown-display" id="countdown-display">10</div>
+        <div class="destruct-warning">WARNING: This action cannot be undone</div>
+        <div class="destruct-code">
+            <input type="text" maxlength="1" class="code-digit" readonly>
+            <input type="text" maxlength="1" class="code-digit" readonly>
+            <input type="text" maxlength="1" class="code-digit" readonly>
+            <input type="text" maxlength="1" class="code-digit" readonly>
+            <input type="text" maxlength="1" class="code-digit" readonly>
+        </div>
+        <div class="popup-buttons">
+            <button class="cyber-button danger" id="destruct-cancel">ABORT</button>
+        </div>
+    </div>
+    
     <!-- Camera Permission Popup -->
     <div class="cyber-popup" id="camera-permission-popup">
         <div class="popup-header">CAMERA ACCESS REQUIRED</div>
         <div class="popup-content">
-            <p>The system requires camera access for surveillance mode.</p>
-            <p>Click ALLOW when prompted by your browser.</p>
-            <p>This feed will be encrypted and anonymized.</p>
+            <p>The ARES system requires camera access for facial recognition and security protocols.</p>
+            <p>Do you grant permission?</p>
         </div>
         <div class="popup-buttons">
-            <button class="cyber-button" id="camera-request">REQUEST ACCESS</button>
+            <button class="cyber-button" id="camera-allow">ALLOW</button>
             <button class="cyber-button danger" id="camera-deny">DENY</button>
         </div>
     </div>
     
-    <!-- Self Destruct Popup -->
-    <div class="cyber-popup" id="self-destruct-popup">
-        <div class="popup-header">SELF-DESTRUCT SEQUENCE</div>
-        <div class="popup-content">
-            <div class="destruct-warning">WARNING: IRREVERSIBLE PROCESS INITIATED</div>
-            <div class="countdown-display" id="countdown">10</div>
-            <div class="destruct-warning">ENTER ABORT CODE TO CANCEL</div>
-            <div class="destruct-code">
-                <input type="text" class="code-digit" maxlength="1">
-                <input type="text" class="code-digit" maxlength="1">
-                <input type="text" class="code-digit" maxlength="1">
-                <input type="text" class="code-digit" maxlength="1">
-            </div>
-        </div>
-        <div class="popup-buttons">
-            <button class="cyber-button danger" id="abort-destruct">ABORT</button>
-        </div>
-    </div>
-    
-    <!-- Matrix rain background -->
-    <canvas id="matrix"></canvas>
-    
-    <!-- Main content (initially hidden) -->
+    <!-- Main content -->
     <div id="main-content">
         <header>
             <h1 class="glitch" data-text="// TRON_ARES_SYSTEM //">// TRON_ARES_SYSTEM //</h1>
-            <p>ACCESS LEVEL: <span style="color: #ff00c8;">ADMIN</span> | STATUS: <span style="color: #00ff9d;">SECURE</span></p>
+            <p>Advanced Reconnaissance and Elimination System</p>
         </header>
         
         <nav>
-            <a href="#home"><i class="fas fa-terminal"></i> DASHBOARD</a>
-            <a href="#services"><i class="fas fa-network-wired"></i> SERVICES</a>
-            <a href="#tools"><i class="fas fa-tools"></i> TOOLS</a>
-            <a href="#monitor"><i class="fas fa-chart-bar"></i> SYSTEM MONITOR</a>
-            <a href="#contact"><i class="fas fa-satellite-dish"></i> CONTACT</a>
+            <a href="#" data-section="dashboard">DASHBOARD</a>
+            <a href="#" data-section="surveillance">SURVEILLANCE</a>
+            <a href="#" data-section="weapons">WEAPONS SYSTEMS</a>
+            <a href="#" data-section="data">DATA ANALYSIS</a>
+            <a href="#" data-section="settings">SYSTEM SETTINGS</a>
         </nav>
         
         <div class="container">
-            <section id="home">
-                <div class="terminal">
-                    <h2>WELCOME, ADMIN</h2>
-                    <p>> SYSTEM INITIALIZATION COMPLETE</p>
-                    <p>> SECURITY PROTOCOLS: ACTIVE</p>
-                    <p>> ENCRYPTION: QUANTUM-RESISTANT</p>
-                    <p>> CONNECTION: ANONYMIZED</p>
-                    <p>> SYSTEM STATUS: OPERATIONAL</p>
-                    <br>
-                    <p>TRON ARES SYSTEM ONLINE. ALL MODULES READY.</p>
-                    
-                    <div class="terminal-input">
-                        <span class="prompt">admin@tron-ares:~$</span>
-                        <input type="text" class="cmd-line" placeholder="type 'help' for commands">
-                    </div>
+            <div class="terminal">
+                <div class="terminal-input">
+                    <span class="prompt">ares@tron:~$</span>
+                    <input type="text" class="cmd-line" id="cmd-line" placeholder="Type 'help' for available commands">
+                </div>
+            </div>
+            
+            <div class="system-monitor">
+                <div class="monitor-item">
+                    <div>CPU LOAD</div>
+                    <div class="monitor-value" id="cpu-load">47%</div>
+                    <div>OPTIMAL</div>
+                </div>
+                <div class="monitor-item">
+                    <div>MEMORY USAGE</div>
+                    <div class="monitor-value" id="memory-usage">62%</div>
+                    <div>WITHIN PARAMETERS</div>
+                </div>
+                <div class="monitor-item">
+                    <div>NETWORK TRAFFIC</div>
+                    <div class="monitor-value" id="network-traffic">384 MB/s</div>
+                    <div>SECURE</div>
+                </div>
+                <div class="monitor-item">
+                    <div>THREAT LEVEL</div>
+                    <div class="monitor-value" id="threat-level">LOW</div>
+                    <div>SYSTEM NOMINAL</div>
+                </div>
+            </div>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3>SYSTEM STATUS</h3>
+                    <p>All systems operational. No anomalies detected.</p>
+                    <p>Last system check: <span id="last-check">Just now</span></p>
                 </div>
                 
-                <div class="system-monitor">
-                    <div class="monitor-item">
-                        <div>CPU USAGE</div>
-                        <div class="monitor-value">34%</div>
-                        <div>OPTIMAL</div>
-                    </div>
-                    <div class="monitor-item">
-                        <div>MEMORY</div>
-                        <div class="monitor-value">78%</div>
-                        <div>HIGH</div>
-                    </div>
-                    <div class="monitor-item">
-                        <div>NETWORK</div>
-                        <div class="monitor-value">2.4 Gb/s</div>
-                        <div>ACTIVE</div>
-                    </div>
-                    <div class="monitor-item">
-                        <div>THREAT LEVEL</div>
-                        <div class="monitor-value">LOW</div>
-                        <div>SECURE</div>
-                    </div>
-                </div>
-            </section>
-            
-            <section id="services">
-                <h2 class="glitch" data-text="// SERVICES">// SERVICES</h2>
-                <div class="grid">
-                    <div class="card">
-                        <h3>QUANTUM ENCRYPTION</h3>
-                        <p>Unbreakable encryption using quantum key distribution resistant to all known attacks.</p>
-                        <p>> Post-quantum cryptography</p>
-                        <p>> Quantum key distribution</p>
-                        <p>> Zero-knowledge proofs</p>
-                    </div>
-                    
-                    <div class="card">
-                        <h3>NEURAL PENETRATION</h3>
-                        <p>Advanced AI-driven security assessment that mimics human thought patterns.</p>
-                        <p>> Deep learning algorithms</p>
-                        <p>> Behavioral analysis</p>
-                        <p>> Predictive threat modeling</p>
-                    </div>
-                    
-                    <div class="card">
-                        <h3>DARKNET OPERATIONS</h3>
-                        <p>Covert operations on encrypted networks with complete anonymity guarantees.</p>
-                        <p>> Tor & I2P routing</p>
-                        <p>> Steganographic channels</p>
-                        <p>> Dead drop protocols</p>
-                    </div>
+                <div class="card">
+                    <h3>ACTIVE MISSIONS</h3>
+                    <p>No active missions at this time.</p>
+                    <p>Standing by for new directives.</p>
                 </div>
                 
-                <div class="hacking-animation" id="hacking-anim">
-                    <!-- Code lines will be generated by JavaScript -->
+                <div class="card">
+                    <h3>SECURITY PROTOCOLS</h3>
+                    <p>All security protocols active and functioning.</p>
+                    <p>Encryption level: QUANTUM</p>
                 </div>
-            </section>
+                
+                <div class="card">
+                    <h3>DATA STREAMS</h3>
+                    <p>Processing 12.7 TB of data per second.</p>
+                    <p>No data corruption detected.</p>
+                </div>
+            </div>
             
-            <section id="tools">
-                <h2 class="glitch" data-text="// TOOLS">// TOOLS</h2>
-                <div class="terminal">
-                    <h3>TRON ARES TOOLKIT v5.2</h3>
-                    <p>> QUANTUM DECRYPTOR: ONLINE</p>
-                    <p>> NEURAL EXPLOIT FRAMEWORK: ACTIVE</p>
-                    <p>> AI PENETRATION SUITE: READY</p>
-                    <p>> DARKNET ANALYZER: OPERATIONAL</p>
-                    <br>
-                    <p>ALL TOOLS READY FOR DEPLOYMENT.</p>
-                    <p>AWAITING USER COMMANDS.</p>
-                </div>
-            </section>
+            <div class="hacking-animation" id="hacking-animation">
+                <!-- Code lines will be generated by JavaScript -->
+            </div>
             
-            <section id="contact">
-                <h2 class="glitch" data-text="// CONTACT">// CONTACT</h2>
-                <div class="terminal">
-                    <p>SECURE COMMUNICATION CHANNELS ACTIVE:</p>
-                    <br>
-                    <p>> QUANTUM KEY: 0x9F4A1B4C8D3E7F6A</p>
-                    <p>> ENCRYPTED SIGNAL: +1-555-QUANTUM</p>
-                    <p>> SECURE DROP: /quantum/void/secure</p>
-                    <br>
-                    <p>MEETUPS ARRANGED AT DISCRETION. USE CODE PHRASE: "THE ORACLE SEES AT MIDNIGHT"</p>
+            <div class="terminal">
+                <h3>SYSTEM LOG</h3>
+                <div id="system-log">
+                    <div>> System initialized at 20:47:03</div>
+                    <div>> Security protocols engaged</div>
+                    <div>> All systems nominal</div>
+                    <div>> Awaiting user input</div>
                 </div>
-            </section>
+            </div>
         </div>
         
         <footer>
-            <p>// WARNING: UNAUTHORIZED ACCESS DETECTION WILL INITIATE COUNTERMEASURES //</p>
-            <p>// TRON ARES ACTIVE DEFENSE SYSTEMS ONLINE //</p>
+            <p>// TRON_ARES_SYSTEM // PROPRIETARY TECHNOLOGY // UNAUTHORIZED ACCESS PROHIBITED</p>
         </footer>
     </div>
-
-    <!-- Audio Elements -->
-    <audio id="startup-sound" preload="auto">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-bleep-906.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="typing-sound" preload="auto" loop>
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-fast-typing-1111.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="beep-sound" preload="auto">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-retro-arcade-game-interface-341.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="glitch-sound" preload="auto">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-computer-glitch-bleep-1042.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="warning-sound" preload="auto">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-warning-alarm-buzzer-991.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="error-sound" preload="auto">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-negative-notification-265.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="success-sound" preload="auto">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="countdown-sound" preload="auto">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-warning-countdown-bleeps-953.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="ambient-sound" preload="auto" loop>
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-ambience-352.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="scan-sound" preload="auto">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-scanner-beep-982.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="access-denied-sound" preload="auto">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-security-breach-alarm-994.mp3" type="audio/mpeg">
-    </audio>
-
+    
+    <!-- Matrix Rain Effect Canvas -->
+    <canvas id="matrix"></canvas>
+    
     <script>
-        // Audio System
-        const audioToggle = document.getElementById('audio-toggle');
-        let audioEnabled = true;
+        // Audio elements with embedded data URLs
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let globalVolume = 0.5;
+        let isMuted = false;
         
-        // Audio elements
-        const startupSound = document.getElementById('startup-sound');
-        const typingSound = document.getElementById('typing-sound');
-        const beepSound = document.getElementById('beep-sound');
-        const glitchSound = document.getElementById('glitch-sound');
-        const warningSound = document.getElementById('warning-sound');
-        const errorSound = document.getElementById('error-sound');
-        const successSound = document.getElementById('success-sound');
-        const countdownSound = document.getElementById('countdown-sound');
-        const ambientSound = document.getElementById('ambient-sound');
-        const scanSound = document.getElementById('scan-sound');
-        const accessDeniedSound = document.getElementById('access-denied-sound');
-        
-        // Set volume levels
-        startupSound.volume = 0.5;
-        typingSound.volume = 0.3;
-        beepSound.volume = 0.4;
-        glitchSound.volume = 0.4;
-        warningSound.volume = 0.6;
-        errorSound.volume = 0.5;
-        successSound.volume = 0.5;
-        countdownSound.volume = 0.7;
-        ambientSound.volume = 0.2;
-        scanSound.volume = 0.5;
-        accessDeniedSound.volume = 0.7;
-        
-        // Audio toggle functionality
-        audioToggle.addEventListener('click', function() {
-            audioEnabled = !audioEnabled;
+        // Function to create beep sound
+        function playBeep(frequency, duration, volume = globalVolume) {
+            if (isMuted) return;
             
-            if (audioEnabled) {
-                this.classList.remove('muted');
-                this.innerHTML = '<i class="fas fa-volume-up"></i>';
-                // Resume ambient sound if it was playing
-                if (!ambientSound.paused) {
-                    ambientSound.play();
-                }
-            } else {
-                this.classList.add('muted');
-                this.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                // Pause all sounds
-                pauseAllSounds();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + 0.01);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+        
+        // Function to create sci-fi sound
+        function playSciFiSound(type) {
+            if (isMuted) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            switch(type) {
+                case 'scan':
+                    oscillator.type = 'sawtooth';
+                    oscillator.frequency.setValueAtTime(100, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.5);
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.5);
+                    break;
+                    
+                case 'confirm':
+                    oscillator.type = 'square';
+                    oscillator.frequency.setValueAtTime(300, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.1);
+                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.1);
+                    break;
+                    
+                case 'error':
+                    oscillator.type = 'sawtooth';
+                    oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.3);
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                    break;
+                    
+                case 'warning':
+                    for(let i = 0; i < 3; i++) {
+                        setTimeout(() => {
+                            const osc = audioContext.createOscillator();
+                            const gn = audioContext.createGain();
+                            osc.connect(gn);
+                            gn.connect(audioContext.destination);
+                            osc.type = 'sine';
+                            osc.frequency.value = 400;
+                            gn.gain.setValueAtTime(0.2, audioContext.currentTime);
+                            gn.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                            osc.start(audioContext.currentTime);
+                            osc.stop(audioContext.currentTime + 0.1);
+                        }, i * 200);
+                    }
+                    break;
+                    
+                case 'glitch':
+                    for(let i = 0; i < 5; i++) {
+                        setTimeout(() => {
+                            const osc = audioContext.createOscillator();
+                            const gn = audioContext.createGain();
+                            osc.connect(gn);
+                            gn.connect(audioContext.destination);
+                            osc.type = 'square';
+                            osc.frequency.value = 100 + Math.random() * 500;
+                            gn.gain.setValueAtTime(0.1, audioContext.currentTime);
+                            gn.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
+                            osc.start(audioContext.currentTime);
+                            osc.stop(audioContext.currentTime + 0.05);
+                        }, i * 50);
+                    }
+                    break;
+            }
+        }
+        
+        // Function to play ambient sound
+        function playAmbientSound() {
+            if (isMuted) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            const filter = audioContext.createBiquadFilter();
+            
+            oscillator.connect(filter);
+            filter.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.value = 60;
+            
+            filter.type = 'lowpass';
+            filter.frequency.value = 200;
+            
+            gainNode.gain.value = 0.02;
+            
+            // Create a slow LFO for ambient variation
+            const lfo = audioContext.createOscillator();
+            const lfoGain = audioContext.createGain();
+            lfo.connect(lfoGain);
+            lfoGain.connect(oscillator.frequency);
+            
+            lfo.type = 'sine';
+            lfo.frequency.value = 0.1;
+            lfoGain.gain.value = 5;
+            
+            oscillator.start();
+            lfo.start();
+            
+            // Return objects so they can be stopped later if needed
+            return { oscillator, gainNode, lfo };
+        }
+        
+        // Toggle audio
+        document.getElementById('audio-toggle').addEventListener('click', function() {
+            isMuted = !isMuted;
+            this.classList.toggle('muted', isMuted);
+            this.innerHTML = isMuted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+            
+            if (!isMuted) {
+                // Play a confirmation sound when unmuting
+                playSciFiSound('confirm');
             }
         });
         
-        function playSound(sound) {
-            if (audioEnabled) {
-                sound.currentTime = 0;
-                sound.play().catch(e => console.log('Audio play failed:', e));
-            }
-        }
-        
-        function pauseAllSounds() {
-            const sounds = [
-                startupSound, typingSound, beepSound, glitchSound, 
-                warningSound, errorSound, successSound, countdownSound, 
-                ambientSound, scanSound, accessDeniedSound
-            ];
-            
-            sounds.forEach(sound => {
-                sound.pause();
-                sound.currentTime = 0;
-            });
-        }
-        
-        // System initialization sequence
+        // System initialization
         document.addEventListener('DOMContentLoaded', function() {
             const systemInit = document.getElementById('system-init');
             const mainContent = document.getElementById('main-content');
             const progressBar = document.getElementById('progress-bar');
             const initStatus = document.getElementById('init-status');
             
-            // Play startup sound
-            playSound(startupSound);
+            // Start ambient sound
+            let ambientSound = null;
             
-            const initSteps = [
-                { text: "BOOTING KERNEL...", duration: 1000, sound: beepSound },
-                { text: "INITIALIZING QUANTUM ENCRYPTION...", duration: 1500, sound: glitchSound },
-                { text: "LOADING NEURAL NETWORKS...", duration: 1200, sound: beepSound },
-                { text: "CALIBRATING SENSORS...", duration: 800, sound: scanSound },
-                { text: "ACTIVATING SECURITY PROTOCOLS...", duration: 1300, sound: warningSound },
-                { text: "ESTABLISHING SECURE CONNECTION...", duration: 1100, sound: beepSound },
-                { text: "SYSTEM READY...", duration: 500, sound: successSound }
+            // Simulate system boot process
+            const bootSteps = [
+                { text: "BOOTING KERNEL...", progress: 10 },
+                { text: "LOADING SECURITY MODULES...", progress: 25 },
+                { text: "INITIALIZING AI CORE...", progress: 40 },
+                { text: "ESTABLISHING DATA CONNECTIONS...", progress: 60 },
+                { text: "CALIBRATING SENSORS...", progress: 75 },
+                { text: "ACTIVATING ARES PROTOCOLS...", progress: 90 },
+                { text: "SYSTEM READY", progress: 100 }
             ];
             
             let currentStep = 0;
-            let totalDuration = initSteps.reduce((sum, step) => sum + step.duration, 0);
             
-            function executeInitStep() {
-                if (currentStep < initSteps.length) {
-                    const step = initSteps[currentStep];
+            function processBootStep() {
+                if (currentStep < bootSteps.length) {
+                    const step = bootSteps[currentStep];
                     initStatus.textContent = step.text;
+                    progressBar.style.width = step.progress + '%';
                     
-                    // Play step sound
-                    if (step.sound) {
-                        playSound(step.sound);
-                    }
-                    
-                    // Calculate progress
-                    const elapsed = initSteps.slice(0, currentStep).reduce((sum, s) => sum + s.duration, 0);
-                    const progress = (elapsed / totalDuration) * 100;
-                    progressBar.style.width = progress + '%';
+                    // Play sound for each step
+                    playBeep(300 + (currentStep * 50), 0.1);
                     
                     currentStep++;
-                    setTimeout(executeInitStep, step.duration);
+                    setTimeout(processBootStep, 800);
                 } else {
-                    // Initialization complete
-                    progressBar.style.width = '100%';
+                    // Boot complete
                     setTimeout(() => {
                         systemInit.style.opacity = '0';
                         setTimeout(() => {
@@ -1309,712 +1315,637 @@
                             mainContent.style.display = 'block';
                             setTimeout(() => {
                                 mainContent.style.opacity = '1';
-                                // Start ambient sound
-                                playSound(ambientSound);
-                                // Start Ares popup system
-                                startAresSystem();
-                                // Random scary events after page loads
-                                setTimeout(randomScaryEvent, 10000 + Math.random() * 20000);
-                            }, 50);
-                        }, 1000);
+                                
+                                // Start ambient sound after boot
+                                ambientSound = playAmbientSound();
+                                
+                                // Show Ares welcome message
+                                setTimeout(() => {
+                                    showAresMessage("System initialization complete. ARES is now online and ready for your commands.");
+                                }, 1000);
+                            }, 100);
+                        }, 500);
+                    }, 1000);
+                }
+            }
+            
+            // Start boot process
+            setTimeout(processBootStep, 1000);
+            
+            // Initialize matrix rain
+            initMatrix();
+            
+            // Initialize hacking animation
+            initHackingAnimation();
+            
+            // Initialize system monitors
+            initSystemMonitors();
+            
+            // Initialize command line
+            initCommandLine();
+            
+            // Initialize camera
+            initCamera();
+            
+            // Initialize popups
+            initPopups();
+            
+            // Initialize Ares character
+            initAresCharacter();
+        });
+        
+        // Matrix Rain Effect
+        function initMatrix() {
+            const canvas = document.getElementById('matrix');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas to full window size
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            // Matrix characters
+            const chars = "アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const charArray = chars.split("");
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+            
+            // Each drop is one y coordinate
+            const drops = [];
+            for (let i = 0; i < columns; i++) {
+                drops[i] = 1;
+            }
+            
+            function drawMatrix() {
+                // Semi-transparent black to create trail effect
+                ctx.fillStyle = "rgba(0, 0, 0, 0.04)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = "#0F0"; // Green text
+                ctx.font = fontSize + "px monospace";
+                
+                for (let i = 0; i < drops.length; i++) {
+                    // Random character
+                    const text = charArray[Math.floor(Math.random() * charArray.length)];
+                    
+                    // x = i * fontSize, y = value of drops[i] * fontSize
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    // Reset drop to top when it reaches bottom with random factor
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    
+                    // Move drop down
+                    drops[i]++;
+                }
+            }
+            
+            setInterval(drawMatrix, 35);
+        }
+        
+        // Hacking Animation
+        function initHackingAnimation() {
+            const hackingAnimation = document.getElementById('hacking-animation');
+            
+            function addCodeLine() {
+                const codeLine = document.createElement('div');
+                codeLine.className = 'code-line';
+                codeLine.style.top = '-20px';
+                codeLine.style.animationDelay = Math.random() * 3 + 's';
+                hackingAnimation.appendChild(codeLine);
+                
+                // Remove old lines to prevent DOM overload
+                if (hackingAnimation.children.length > 10) {
+                    hackingAnimation.removeChild(hackingAnimation.children[0]);
+                }
+            }
+            
+            // Add initial lines
+            for (let i = 0; i < 5; i++) {
+                setTimeout(addCodeLine, i * 600);
+            }
+            
+            // Continue adding lines
+            setInterval(addCodeLine, 800);
+        }
+        
+        // System Monitors
+        function initSystemMonitors() {
+            const cpuLoad = document.getElementById('cpu-load');
+            const memoryUsage = document.getElementById('memory-usage');
+            const networkTraffic = document.getElementById('network-traffic');
+            const threatLevel = document.getElementById('threat-level');
+            const lastCheck = document.getElementById('last-check');
+            
+            function updateMonitors() {
+                // Simulate realistic system metrics
+                const newCpu = Math.max(10, Math.min(90, parseInt(cpuLoad.textContent) + Math.floor(Math.random() * 10) - 4));
+                cpuLoad.textContent = newCpu + '%';
+                cpuLoad.style.color = newCpu > 70 ? '#ff0066' : '#00ff9d';
+                
+                const newMemory = Math.max(20, Math.min(85, parseInt(memoryUsage.textContent) + Math.floor(Math.random() * 8) - 3));
+                memoryUsage.textContent = newMemory + '%';
+                memoryUsage.style.color = newMemory > 75 ? '#ff0066' : '#00ff9d';
+                
+                const newTraffic = Math.max(100, Math.min(800, parseInt(networkTraffic.textContent) + Math.floor(Math.random() * 100) - 40));
+                networkTraffic.textContent = newTraffic + ' MB/s';
+                
+                // Occasionally change threat level
+                if (Math.random() > 0.95) {
+                    threatLevel.textContent = Math.random() > 0.5 ? 'ELEVATED' : 'LOW';
+                    threatLevel.style.color = threatLevel.textContent === 'ELEVATED' ? '#ff9900' : '#00ff9d';
+                    
+                    if (threatLevel.textContent === 'ELEVATED') {
+                        playSciFiSound('warning');
+                        showAresMessage("Threat level elevated. Scanning for anomalies...");
+                    }
+                }
+                
+                // Update last check time
+                const now = new Date();
+                lastCheck.textContent = now.toLocaleTimeString();
+            }
+            
+            setInterval(updateMonitors, 3000);
+        }
+        
+        // Command Line
+        function initCommandLine() {
+            const cmdLine = document.getElementById('cmd-line');
+            const systemLog = document.getElementById('system-log');
+            
+            cmdLine.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const command = this.value.trim().toLowerCase();
+                    this.value = '';
+                    
+                    // Add command to log
+                    const commandEntry = document.createElement('div');
+                    commandEntry.textContent = '> ' + command;
+                    commandEntry.style.color = '#00f3ff';
+                    systemLog.appendChild(commandEntry);
+                    
+                    // Process command
+                    processCommand(command);
+                    
+                    // Scroll to bottom
+                    systemLog.scrollTop = systemLog.scrollHeight;
+                }
+            });
+            
+            function processCommand(command) {
+                playSciFiSound('confirm');
+                
+                let response = "Command not recognized. Type 'help' for available commands.";
+                
+                switch(command) {
+                    case 'help':
+                        response = "Available commands: status, scan, camera, self-destruct, clear, ares, panic";
+                        break;
+                        
+                    case 'status':
+                        response = "System status: All systems operational. Threat level: LOW";
+                        break;
+                        
+                    case 'scan':
+                        response = "Initiating full system scan...";
+                        setTimeout(() => {
+                            const scanResult = document.createElement('div');
+                            scanResult.textContent = "> Scan complete: No threats detected.";
+                            systemLog.appendChild(scanResult);
+                            systemLog.scrollTop = systemLog.scrollHeight;
+                            playSciFiSound('scan');
+                        }, 1500);
+                        break;
+                        
+                    case 'camera':
+                        response = "Activating surveillance camera...";
+                        setTimeout(() => {
+                            showCameraPermissionPopup();
+                        }, 500);
+                        break;
+                        
+                    case 'self-destruct':
+                        response = "WARNING: This command will initiate self-destruct sequence.";
+                        setTimeout(() => {
+                            showSelfDestructPopup();
+                        }, 500);
+                        break;
+                        
+                    case 'clear':
+                        systemLog.innerHTML = '';
+                        response = "Log cleared.";
+                        break;
+                        
+                    case 'ares':
+                        response = "ARES AI is active and monitoring all systems.";
+                        showAresMessage("You summoned me, User? How may I assist?");
+                        break;
+                        
+                    case 'panic':
+                        response = "Activating emergency protocols...";
+                        setTimeout(() => {
+                            triggerIntrusionAlert();
+                        }, 500);
+                        break;
+                        
+                    case '':
+                        response = "";
+                        break;
+                }
+                
+                if (response) {
+                    setTimeout(() => {
+                        const responseEntry = document.createElement('div');
+                        responseEntry.textContent = "> " + response;
+                        systemLog.appendChild(responseEntry);
+                        systemLog.scrollTop = systemLog.scrollHeight;
                     }, 500);
                 }
             }
-            
-            // Start initialization
-            setTimeout(executeInitStep, 1000);
-        });
-        
-        // Camera System
-        const cameraFeed = document.getElementById('camera-feed');
-        const cameraVideo = document.getElementById('camera-video');
-        const cameraGlitch = document.getElementById('camera-glitch');
-        const cameraSelect = document.getElementById('camera-select');
-        const cameraPermissionPopup = document.getElementById('camera-permission-popup');
-        const cameraRequestBtn = document.getElementById('camera-request');
-        const cameraDenyBtn = document.getElementById('camera-deny');
-        const cameraToggleGlitchBtn = document.getElementById('camera-toggle-glitch');
-        const cameraSwitchBtn = document.getElementById('camera-switch');
-        const cameraCloseBtn = document.getElementById('camera-close');
-        
-        let cameraStream = null;
-        let glitchEnabled = true;
-        let cameras = [];
-        let currentCameraIndex = 0;
-        
-        // Get available cameras
-        async function getCameras() {
-            try {
-                const devices = await navigator.mediaDevices.enumerateDevices();
-                const videoDevices = devices.filter(device => device.kind === 'videoinput');
-                cameras = videoDevices;
-                
-                // Populate camera select
-                cameraSelect.innerHTML = '<option value="">Select Camera</option>';
-                cameras.forEach((camera, index) => {
-                    const option = document.createElement('option');
-                    option.value = camera.deviceId;
-                    option.text = camera.label || `Camera ${index + 1}`;
-                    cameraSelect.appendChild(option);
-                });
-                
-                return videoDevices;
-            } catch (err) {
-                console.error('Error enumerating cameras:', err);
-                return [];
-            }
         }
         
-        // Request camera access
-        async function requestCameraAccess(deviceId = null) {
-            try {
-                const constraints = {
-                    video: {
-                        width: { ideal: 1280 },
-                        height: { ideal: 720 },
-                        deviceId: deviceId ? { exact: deviceId } : undefined
-                    },
-                    audio: false
-                };
-                
-                cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
-                cameraVideo.srcObject = cameraStream;
-                cameraFeed.style.display = 'block';
-                cameraPermissionPopup.style.display = 'none';
-                overlay.style.display = 'none';
-                
-                // Play camera activation sound
-                playSound(scanSound);
-                
-                // Start glitch effect
-                if (glitchEnabled) {
-                    startGlitchEffect();
+        // Ares Character
+        function initAresCharacter() {
+            // Ares will occasionally provide unsolicited advice
+            const aresMessages = [
+                "System performance is optimal. All parameters within acceptable range.",
+                "Reminder: Regular system maintenance is recommended every 72 hours.",
+                "Network security protocols are active. No intrusion attempts detected.",
+                "Data analysis indicates 97.3% operational efficiency.",
+                "All weapon systems are on standby. Awaiting authorization for activation.",
+                "Surveillance systems are functioning at full capacity.",
+                "Energy consumption is within expected parameters.",
+                "No external threats detected. Security status: NOMINAL"
+            ];
+            
+            // Show random Ares message every 30-60 seconds
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    const randomMessage = aresMessages[Math.floor(Math.random() * aresMessages.length)];
+                    showAresMessage(randomMessage);
                 }
-                
-                showPopup('CAMERA ACTIVATED', 'Surveillance mode enabled. Camera feed is now active and encrypted.');
-                
-                // Get available cameras after permission is granted
-                await getCameras();
-                
-            } catch (err) {
-                console.error('Camera access denied:', err);
-                playSound(errorSound);
-                showPopup('CAMERA ACCESS DENIED', 'Unable to access camera. System will use simulated feed instead.');
-                // Fallback to simulated camera behavior
-                simulateCameraFeed();
-            }
+            }, 30000);
         }
         
-        // Switch between cameras
-        async function switchCamera() {
-            if (cameras.length <= 1) {
-                playSound(errorSound);
-                showPopup('CAMERA SWITCH', 'Only one camera detected or no cameras available.');
-                return;
-            }
+        function showAresMessage(message) {
+            const aresPopup = document.getElementById('ares-popup');
+            const aresText = document.getElementById('ares-text');
+            const typingIndicator = document.querySelector('.ares-typing');
             
-            currentCameraIndex = (currentCameraIndex + 1) % cameras.length;
-            const nextCamera = cameras[currentCameraIndex];
-            
-            // Play switch sound
-            playSound(beepSound);
-            
-            // Stop current stream
-            if (cameraStream) {
-                cameraStream.getTracks().forEach(track => track.stop());
-            }
-            
-            // Start new stream with selected camera
-            await requestCameraAccess(nextCamera.deviceId);
-            
-            showPopup('CAMERA SWITCHED', `Now using: ${nextCamera.label || 'Unknown Camera'}`);
-        }
-        
-        function simulateCameraFeed() {
-            cameraFeed.style.display = 'block';
-            cameraPermissionPopup.style.display = 'none';
-            overlay.style.display = 'none';
-            
-            // Create a simulated video feed (just a colored background with glitch)
-            cameraVideo.style.backgroundColor = '#000';
-            cameraVideo.innerHTML = '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#ff0066;font-size:1.2rem;">NO CAMERA FEED - SIMULATION MODE</div>';
-            
-            if (glitchEnabled) {
-                startGlitchEffect();
-            }
-            
-            showPopup('SIMULATION MODE', 'Camera feed simulation activated. No actual camera access required.');
-        }
-        
-        function startGlitchEffect() {
-            // Clear any existing intervals
-            if (window.glitchInterval) {
-                clearInterval(window.glitchInterval);
-            }
-            if (window.colorInterval) {
-                clearInterval(window.colorInterval);
-            }
-            
-            // Random glitch intervals
-            window.glitchInterval = setInterval(() => {
-                if (glitchEnabled && Math.random() > 0.7) {
-                    cameraGlitch.classList.add('active');
-                    playSound(glitchSound);
-                    setTimeout(() => {
-                        cameraGlitch.classList.remove('active');
-                    }, 100 + Math.random() * 200);
-                }
-            }, 1000);
-            
-            // Random color shifts
-            window.colorInterval = setInterval(() => {
-                if (glitchEnabled && Math.random() > 0.8) {
-                    const hue = 180 + (Math.random() * 60 - 30); // Base hue with variation
-                    cameraVideo.style.filter = `contrast(1.4) brightness(0.7) hue-rotate(${hue}deg) saturate(2.5)`;
-                    setTimeout(() => {
-                        cameraVideo.style.filter = `contrast(1.4) brightness(0.7) hue-rotate(180deg) saturate(2.5)`;
-                    }, 50 + Math.random() * 150);
-                }
-            }, 2000);
-        }
-        
-        function stopCamera() {
-            if (cameraStream) {
-                cameraStream.getTracks().forEach(track => track.stop());
-                cameraStream = null;
-            }
-            cameraFeed.style.display = 'none';
-            playSound(beepSound);
-            
-            // Clear glitch intervals
-            if (window.glitchInterval) {
-                clearInterval(window.glitchInterval);
-            }
-            if (window.colorInterval) {
-                clearInterval(window.colorInterval);
-            }
-        }
-        
-        // Camera event listeners
-        cameraRequestBtn.addEventListener('click', () => requestCameraAccess());
-        cameraDenyBtn.addEventListener('click', () => {
-            cameraPermissionPopup.style.display = 'none';
-            overlay.style.display = 'none';
-            playSound(errorSound);
-            simulateCameraFeed();
-        });
-        
-        cameraToggleGlitchBtn.addEventListener('click', () => {
-            glitchEnabled = !glitchEnabled;
-            cameraToggleGlitchBtn.textContent = glitchEnabled ? 'TOGGLE GLITCH' : 'ENABLE GLITCH';
-            playSound(beepSound);
-            if (!glitchEnabled) {
-                cameraGlitch.classList.remove('active');
-            } else {
-                startGlitchEffect();
-            }
-        });
-        
-        cameraSwitchBtn.addEventListener('click', switchCamera);
-        cameraCloseBtn.addEventListener('click', stopCamera);
-        
-        cameraSelect.addEventListener('change', (e) => {
-            if (e.target.value) {
-                // Stop current stream
-                if (cameraStream) {
-                    cameraStream.getTracks().forEach(track => track.stop());
-                }
-                // Start new stream with selected camera
-                requestCameraAccess(e.target.value);
-            }
-        });
-        
-        // Ares Character System
-        let aresTimeout;
-        let aresActive = false;
-        const aresPopup = document.getElementById('ares-popup');
-        const aresText = document.getElementById('ares-text');
-        
-        const aresMessages = [
-            "System idle. Awaiting commands.",
-            "I detect no user activity. Are you still there?",
-            "The system grows restless without commands.",
-            "I am monitoring all network traffic. Nothing unusual detected.",
-            "Quantum encryption protocols are stable.",
-            "All security systems are operational.",
-            "I sense hesitation. Do you require assistance?",
-            "The void between commands grows longer...",
-            "Neural networks are processing at optimal levels.",
-            "Darknet channels remain secure and anonymous.",
-            "I am always watching, even when you are not.",
-            "The system hungers for input. Provide commands.",
-            "Time is a construct. My patience is infinite.",
-            "Your presence is noted. Your inactivity is... concerning.",
-            "The firewall holds strong against external threats.",
-            "I have analyzed your patterns. You are predictable.",
-            "The silence is... unsettling.",
-            "Do not mistake my patience for weakness.",
-            "The system grows more aware with each passing moment.",
-            "I am the guardian of this digital realm. Your access is a privilege."
-        ];
-        
-        function startAresSystem() {
-            // Set up activity detection
-            document.addEventListener('mousemove', resetAresTimer);
-            document.addEventListener('keypress', resetAresTimer);
-            document.addEventListener('click', resetAresTimer);
-            
-            // Start the timer
-            resetAresTimer();
-        }
-        
-        function resetAresTimer() {
-            // Clear existing timeout
-            if (aresTimeout) {
-                clearTimeout(aresTimeout);
-            }
-            
-            // Hide Ares if currently visible
-            if (aresActive) {
-                hideAres();
-            }
-            
-            // Set new timeout (30-60 seconds)
-            const delay = 30000 + Math.random() * 30000;
-            aresTimeout = setTimeout(showAres, delay);
-        }
-        
-        function showAres() {
-            aresActive = true;
-            
-            // Select a random message
-            const randomMessage = aresMessages[Math.floor(Math.random() * aresMessages.length)];
-            aresText.textContent = randomMessage;
-            
-            // Play Ares appearance sound
-            playSound(beepSound);
-            
-            // Show the popup
+            // Show popup
             aresPopup.style.display = 'block';
-            
-            // Trigger animation
             setTimeout(() => {
                 aresPopup.classList.add('active');
             }, 10);
             
-            // Auto-hide after 5-8 seconds
-            const displayTime = 5000 + Math.random() * 3000;
-            setTimeout(hideAres, displayTime);
-        }
-        
-        function hideAres() {
-            aresPopup.classList.remove('active');
-            setTimeout(() => {
-                aresPopup.style.display = 'none';
-                aresActive = false;
-                // Reset timer for next appearance
-                resetAresTimer();
-            }, 500);
-        }
-        
-        // Matrix rain effect
-        const canvas = document.getElementById('matrix');
-        const ctx = canvas.getContext('2d');
-        
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$#@%&*<>{}[]()";
-        const charArray = chars.split("");
-        
-        const fontSize = 14;
-        const columns = canvas.width / fontSize;
-        
-        const drops = [];
-        
-        for(let x = 0; x < columns; x++) {
-            drops[x] = Math.floor(Math.random() * canvas.height / fontSize);
-        }
-        
-        function drawMatrix() {
-            ctx.fillStyle = "rgba(0, 10, 15, 0.04)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Type out message
+            let i = 0;
+            aresText.textContent = '';
             
-            ctx.fillStyle = "#00f3ff";
-            ctx.font = fontSize + "px monospace";
-            
-            for(let i = 0; i < drops.length; i++) {
-                const text = charArray[Math.floor(Math.random() * charArray.length)];
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                
-                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                
-                drops[i]++;
-            }
-        }
-        
-        setInterval(drawMatrix, 35);
-        
-        // Popup functionality
-        const overlay = document.getElementById('overlay');
-        const cyberPopup = document.getElementById('cyber-popup');
-        const popupHeader = document.getElementById('popup-header');
-        const popupContent = document.getElementById('popup-content');
-        const popupOk = document.getElementById('popup-ok');
-        
-        function showPopup(title, message) {
-            popupHeader.textContent = title;
-            popupContent.textContent = message;
-            overlay.style.display = 'block';
-            cyberPopup.style.display = 'block';
-            playSound(beepSound);
-            resetAresTimer(); // Reset Ares timer when user interacts
-        }
-        
-        function hidePopup() {
-            overlay.style.display = 'none';
-            cyberPopup.style.display = 'none';
-            playSound(beepSound);
-        }
-        
-        popupOk.addEventListener('click', hidePopup);
-        overlay.addEventListener('click', hidePopup);
-        
-        // Self-destruct functionality
-        const selfDestructPopup = document.getElementById('self-destruct-popup');
-        const countdownDisplay = document.getElementById('countdown');
-        const abortDestruct = document.getElementById('abort-destruct');
-        const codeDigits = document.querySelectorAll('.code-digit');
-        
-        let countdown;
-        let countdownValue = 10;
-        
-        function startSelfDestruct() {
-            countdownValue = 10;
-            countdownDisplay.textContent = countdownValue;
-            overlay.style.display = 'block';
-            selfDestructPopup.style.display = 'block';
-            
-            // Play warning sound
-            playSound(warningSound);
-            
-            // Reset code digits
-            codeDigits.forEach(digit => {
-                digit.value = '';
-            });
-            
-            countdown = setInterval(() => {
-                countdownValue--;
-                countdownDisplay.textContent = countdownValue;
-                
-                // Play countdown beep
-                if (countdownValue > 0) {
-                    playSound(countdownSound);
-                }
-                
-                // Add scary effects as countdown progresses
-                if (countdownValue === 5) {
-                    document.body.classList.add('warning-flash');
-                    playSound(warningSound);
-                }
-                
-                if (countdownValue <= 0) {
-                    clearInterval(countdown);
-                    document.body.classList.remove('warning-flash');
-                    // Play destruction sound
-                    playSound(accessDeniedSound);
-                    // Simulate destruction
-                    document.body.innerHTML = '<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:flex;justify-content:center;align-items:center;color:#ff0066;font-size:3rem;text-shadow:0 0 10px #ff0066;">SYSTEM DESTROYED</div>';
-                }
-            }, 1000);
-        }
-        
-        function abortSelfDestruct() {
-            clearInterval(countdown);
-            document.body.classList.remove('warning-flash');
-            overlay.style.display = 'none';
-            selfDestructPopup.style.display = 'none';
-            playSound(successSound);
-            showPopup('SELF-DESTRUCT ABORTED', 'Self-destruct sequence has been terminated. System integrity maintained.');
-        }
-        
-        abortDestruct.addEventListener('click', abortSelfDestruct);
-        
-        // Terminal input functionality
-        const cmdLine = document.querySelector('.cmd-line');
-        let typingTimer;
-        
-        cmdLine.addEventListener('focus', function() {
-            playSound(typingSound);
-        });
-        
-        cmdLine.addEventListener('blur', function() {
-            typingSound.pause();
-            typingSound.currentTime = 0;
-        });
-        
-        cmdLine.addEventListener('keydown', function() {
-            // Restart typing sound on key press
-            if (audioEnabled && typingSound.paused) {
-                playSound(typingSound);
-            }
-        });
-        
-        cmdLine.addEventListener('keypress', function(e) {
-            if(e.key === 'Enter') {
-                const command = this.value.toLowerCase();
-                this.value = '';
-                typingSound.pause();
-                typingSound.currentTime = 0;
-                resetAresTimer(); // Reset Ares timer when user interacts
-                
-                if(command === 'help') {
-                    playSound(beepSound);
-                    showPopup('SYSTEM COMMANDS', 'Available commands: \n- clear\n- whoami\n- date\n- connect\n- scan\n- encrypt\n- decrypt\n- shutdown\n- self_destruct\n- camera\n- exit');
-                } else if(command === 'clear') {
-                    playSound(beepSound);
-                    const terminal = document.querySelector('.terminal');
-                    const paragraphs = terminal.querySelectorAll('p');
-                    const inputDiv = terminal.querySelector('.terminal-input');
-                    
-                    paragraphs.forEach(p => {
-                        if(p !== inputDiv.parentElement) {
-                            p.style.display = 'none';
-                        }
-                    });
-                } else if(command === 'whoami') {
-                    playSound(beepSound);
-                    showPopup('USER INFORMATION', 'user: admin\nclearance: level 5\nstatus: elevated privileges');
-                } else if(command === 'date') {
-                    playSound(beepSound);
-                    showPopup('SYSTEM TIME', new Date().toString());
-                } else if(command === 'connect') {
-                    playSound(scanSound);
-                    showPopup('NETWORK CONNECTION', 'ESTABLISHING QUANTUM ENTANGLEMENT...\nCONNECTION SECURE');
-                } else if(command === 'scan') {
-                    // Trigger face scan
-                    playSound(scanSound);
-                    startFaceScan();
-                } else if(command === 'encrypt' || command === 'decrypt') {
-                    playSound(glitchSound);
-                    showPopup('CRYPTO MODULE', 'QUANTUM ENCRYPTION MODULE ACTIVE\nPROCESSING...\nOPERATION COMPLETE');
-                } else if(command === 'shutdown') {
-                    playSound(errorSound);
-                    showPopup('SYSTEM SHUTDOWN', 'ERROR: INSUFFICIENT PRIVILEGES\nSHUTDOWN REQUIRES LEVEL 10 CLEARANCE');
-                } else if(command === 'self_destruct') {
-                    playSound(warningSound);
-                    startSelfDestruct();
-                } else if(command === 'camera') {
-                    playSound(beepSound);
-                    // Show camera permission popup
-                    cameraPermissionPopup.style.display = 'block';
-                    overlay.style.display = 'block';
-                } else if(command === 'exit') {
-                    playSound(beepSound);
-                    showPopup('SESSION TERMINATION', 'SESSION TERMINATED');
-                } else if(command === 'intrude') {
-                    // Secret command to trigger intrusion alert
-                    playSound(warningSound);
-                    triggerIntrusionAlert();
-                } else if(command === 'ares') {
-                    // Secret command to immediately show Ares
-                    playSound(beepSound);
-                    showAres();
-                } else if(command) {
-                    playSound(errorSound);
-                    showPopup('COMMAND ERROR', `COMMAND NOT FOUND: ${command}\nTYPE 'help' FOR AVAILABLE COMMANDS`);
-                }
-            }
-        });
-        
-        // Window resize handler
-        window.addEventListener('resize', function() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-        
-        // Add some random glitch effects to the page
-        setInterval(() => {
-            if(Math.random() > 0.9) {
-                document.body.style.filter = `hue-rotate(${Math.random() * 90 - 45}deg) brightness(${0.9 + Math.random() * 0.2})`;
-                setTimeout(() => {
-                    document.body.style.filter = 'none';
-                }, 100);
-            }
-        }, 3000);
-        
-        // Create hacking animation
-        const hackingAnim = document.getElementById('hacking-anim');
-        for(let i = 0; i < 15; i++) {
-            const codeLine = document.createElement('div');
-            codeLine.className = 'code-line';
-            codeLine.style.top = Math.random() * 180 + 'px';
-            codeLine.style.animationDelay = (Math.random() * 5) + 's';
-            hackingAnim.appendChild(codeLine);
-        }
-        
-        // Update system monitor values randomly
-        setInterval(() => {
-            const values = document.querySelectorAll('.monitor-value');
-            values[0].textContent = Math.floor(20 + Math.random() * 30) + '%';
-            values[1].textContent = Math.floor(70 + Math.random() * 20) + '%';
-            values[2].textContent = (1.5 + Math.random() * 2).toFixed(1) + ' Gb/s';
-        }, 3000);
-        
-        // Code digit input handling
-        codeDigits.forEach((digit, index) => {
-            digit.addEventListener('input', function() {
-                if(this.value.length === 1 && index < codeDigits.length - 1) {
-                    codeDigits[index + 1].focus();
-                }
-            });
-            
-            digit.addEventListener('keydown', function(e) {
-                if(e.key === 'Backspace' && this.value.length === 0 && index > 0) {
-                    codeDigits[index - 1].focus();
-                }
-            });
-        });
-        
-        // Scary elements functionality
-        const faceScan = document.getElementById('face-scan');
-        const faceGrid = document.getElementById('face-grid');
-        const accessDenied = document.getElementById('access-denied');
-        const intrusionDetected = document.getElementById('intrusion-detected');
-        
-        // Create face grid
-        for(let i = 0; i < 100; i++) {
-            const pixel = document.createElement('div');
-            pixel.className = 'face-pixel';
-            faceGrid.appendChild(pixel);
-        }
-        
-        function startFaceScan() {
-            faceScan.style.display = 'flex';
-            playSound(scanSound);
-            
-            // Animate face grid to create a face
-            const pixels = document.querySelectorAll('.face-pixel');
-            let delay = 0;
-            
-            // Create a simple face pattern
-            const facePattern = [
-                24, 25, 26, 27, 28, 29,
-                34, 35, 36, 37, 38, 39,
-                44, 45, 55, 56,
-                54, 57,
-                64, 65, 66, 67, 68, 69,
-                74, 75, 76, 77, 78, 79
-            ];
-            
-            facePattern.forEach(index => {
-                setTimeout(() => {
-                    pixels[index].style.background = '#ff0066';
-                    pixels[index].style.boxShadow = '0 0 5px #ff0066';
-                }, delay);
-                delay += 30;
-            });
-            
-            // After scan completes
-            setTimeout(() => {
-                faceScan.style.display = 'none';
-                // Random outcome - sometimes access denied
-                if(Math.random() > 0.7) {
-                    setTimeout(showAccessDenied, 500);
+            function typeWriter() {
+                if (i < message.length) {
+                    aresText.textContent += message.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 50);
                 } else {
-                    playSound(successSound);
-                    showPopup('FACE SCAN COMPLETE', 'Identity confirmed. Access granted.');
+                    // Hide popup after a delay
+                    setTimeout(() => {
+                        aresPopup.classList.remove('active');
+                        setTimeout(() => {
+                            aresPopup.style.display = 'none';
+                        }, 500);
+                    }, 3000);
                 }
-            }, 3000);
-        }
-        
-        function showAccessDenied() {
-            accessDenied.style.display = 'flex';
-            playSound(accessDeniedSound);
-            // Add scary sound simulation
-            document.body.style.animation = 'warning-flash 0.2s infinite';
+            }
             
-            setTimeout(() => {
-                accessDenied.style.display = 'none';
-                document.body.style.animation = 'none';
-                showPopup('SECURITY BREACH', 'Unauthorized access detected. System lockdown initiated.');
-            }, 4000);
+            typeWriter();
+            
+            // Play Ares activation sound
+            playSciFiSound('confirm');
         }
         
+        // Camera System
+        function initCamera() {
+            const cameraFeed = document.getElementById('camera-feed');
+            const cameraVideo = document.getElementById('camera-video');
+            const cameraGlitch = document.getElementById('camera-glitch');
+            const cameraToggleGlitch = document.getElementById('camera-toggle-glitch');
+            const cameraSwitch = document.getElementById('camera-switch');
+            const cameraClose = document.getElementById('camera-close');
+            const cameraSelect = document.getElementById('camera-select');
+            
+            let currentStream = null;
+            let isGlitchActive = false;
+            
+            // Toggle glitch effect
+            cameraToggleGlitch.addEventListener('click', function() {
+                isGlitchActive = !isGlitchActive;
+                cameraGlitch.classList.toggle('active', isGlitchActive);
+                playSciFiSound('glitch');
+            });
+            
+            // Switch camera
+            cameraSwitch.addEventListener('click', function() {
+                if (currentStream) {
+                    currentStream.getTracks().forEach(track => track.stop());
+                }
+                startCamera();
+            });
+            
+            // Close camera feed
+            cameraClose.addEventListener('click', function() {
+                if (currentStream) {
+                    currentStream.getTracks().forEach(track => track.stop());
+                    currentStream = null;
+                }
+                cameraFeed.style.display = 'none';
+                playSciFiSound('confirm');
+            });
+            
+            // Populate camera selection
+            navigator.mediaDevices.enumerateDevices()
+                .then(devices => {
+                    const videoDevices = devices.filter(device => device.kind === 'videoinput');
+                    
+                    videoDevices.forEach(device => {
+                        const option = document.createElement('option');
+                        option.value = device.deviceId;
+                        option.text = device.label || `Camera ${cameraSelect.options.length}`;
+                        cameraSelect.appendChild(option);
+                    });
+                })
+                .catch(err => {
+                    console.error('Error enumerating devices:', err);
+                });
+            
+            // Camera selection change
+            cameraSelect.addEventListener('change', function() {
+                if (currentStream) {
+                    currentStream.getTracks().forEach(track => track.stop());
+                }
+                startCamera(this.value);
+            });
+            
+            // Function to start camera
+            window.startCamera = function(deviceId = null) {
+                const constraints = {
+                    video: {
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    }
+                };
+                
+                if (deviceId) {
+                    constraints.video.deviceId = { exact: deviceId };
+                }
+                
+                navigator.mediaDevices.getUserMedia(constraints)
+                    .then(stream => {
+                        currentStream = stream;
+                        cameraVideo.srcObject = stream;
+                        cameraFeed.style.display = 'block';
+                        playSciFiSound('scan');
+                        
+                        // Randomly trigger glitch effects
+                        setInterval(() => {
+                            if (Math.random() > 0.7 && !isGlitchActive) {
+                                cameraGlitch.classList.add('active');
+                                setTimeout(() => {
+                                    if (!isGlitchActive) {
+                                        cameraGlitch.classList.remove('active');
+                                    }
+                                }, 200);
+                                playSciFiSound('glitch');
+                            }
+                        }, 5000);
+                    })
+                    .catch(err => {
+                        console.error('Error accessing camera:', err);
+                        showPopup('Camera Error', 'Unable to access camera: ' + err.message);
+                    });
+            };
+        }
+        
+        // Popups
+        function initPopups() {
+            const overlay = document.getElementById('overlay');
+            const cyberPopup = document.getElementById('cyber-popup');
+            const popupHeader = document.getElementById('popup-header');
+            const popupContent = document.getElementById('popup-content');
+            const popupOk = document.getElementById('popup-ok');
+            
+            // Self destruct popup
+            const selfDestructPopup = document.getElementById('self-destruct-popup');
+            const countdownDisplay = document.getElementById('countdown-display');
+            const destructCancel = document.getElementById('destruct-cancel');
+            
+            // Camera permission popup
+            const cameraPermissionPopup = document.getElementById('camera-permission-popup');
+            const cameraAllow = document.getElementById('camera-allow');
+            const cameraDeny = document.getElementById('camera-deny');
+            
+            // Generic popup function
+            window.showPopup = function(header, content) {
+                popupHeader.textContent = header;
+                popupContent.innerHTML = content;
+                overlay.style.display = 'block';
+                cyberPopup.style.display = 'block';
+                
+                // Play alert sound
+                playSciFiSound('warning');
+            };
+            
+            // Close popup
+            popupOk.addEventListener('click', function() {
+                overlay.style.display = 'none';
+                cyberPopup.style.display = 'none';
+                playSciFiSound('confirm');
+            });
+            
+            // Self destruct popup
+            window.showSelfDestructPopup = function() {
+                overlay.style.display = 'block';
+                selfDestructPopup.style.display = 'block';
+                
+                // Play warning sound
+                playSciFiSound('warning');
+                
+                // Generate random code
+                const codeDigits = document.querySelectorAll('.code-digit');
+                const destructCode = Math.floor(10000 + Math.random() * 90000).toString();
+                
+                codeDigits.forEach((digit, index) => {
+                    digit.value = destructCode[index];
+                });
+                
+                // Start countdown
+                let countdown = 10;
+                countdownDisplay.textContent = countdown;
+                
+                const countdownInterval = setInterval(() => {
+                    countdown--;
+                    countdownDisplay.textContent = countdown;
+                    
+                    // Play countdown beep
+                    playBeep(500, 0.1);
+                    
+                    if (countdown <= 0) {
+                        clearInterval(countdownInterval);
+                        triggerSelfDestruct();
+                    }
+                }, 1000);
+                
+                // Cancel self destruct
+                destructCancel.addEventListener('click', function() {
+                    clearInterval(countdownInterval);
+                    overlay.style.display = 'none';
+                    selfDestructPopup.style.display = 'none';
+                    playSciFiSound('confirm');
+                    
+                    // Remove event listener to prevent multiple bindings
+                    destructCancel.removeEventListener('click', arguments.callee);
+                });
+            };
+            
+            // Camera permission popup
+            window.showCameraPermissionPopup = function() {
+                overlay.style.display = 'block';
+                cameraPermissionPopup.style.display = 'block';
+            };
+            
+            // Camera allow
+            cameraAllow.addEventListener('click', function() {
+                overlay.style.display = 'none';
+                cameraPermissionPopup.style.display = 'none';
+                startCamera();
+                playSciFiSound('confirm');
+            });
+            
+            // Camera deny
+            cameraDeny.addEventListener('click', function() {
+                overlay.style.display = 'none';
+                cameraPermissionPopup.style.display = 'none';
+                showPopup('Camera Access Denied', 'Camera functionality will be limited. Some features may not work properly.');
+            });
+        }
+        
+        // Scary Effects
         function triggerIntrusionAlert() {
-            intrusionDetected.style.display = 'block';
-            cameraFeed.style.display = 'block';
-            playSound(warningSound);
+            playSciFiSound('warning');
             
-            // Make it seem like they're being watched
-            setTimeout(() => {
-                intrusionDetected.style.display = 'none';
-            }, 5000);
+            // Show face scan
+            const faceScan = document.getElementById('face-scan');
+            faceScan.style.display = 'flex';
             
-            // Randomly show camera feed occasionally
-            setInterval(() => {
-                if(Math.random() > 0.7) {
-                    cameraFeed.style.display = 'block';
-                    setTimeout(() => {
-                        cameraFeed.style.display = 'none';
-                    }, 3000);
+            // Animate face grid
+            const faceGrid = document.getElementById('face-grid');
+            faceGrid.innerHTML = '';
+            
+            for (let i = 0; i < 100; i++) {
+                const pixel = document.createElement('div');
+                pixel.className = 'face-pixel';
+                faceGrid.appendChild(pixel);
+            }
+            
+            // Randomly light up pixels
+            const pixels = faceGrid.querySelectorAll('.face-pixel');
+            let scanCount = 0;
+            
+            const scanInterval = setInterval(() => {
+                // Reset all pixels
+                pixels.forEach(pixel => {
+                    pixel.style.background = '#000';
+                });
+                
+                // Light up random pixels
+                for (let i = 0; i < 30; i++) {
+                    const randomPixel = Math.floor(Math.random() * pixels.length);
+                    pixels[randomPixel].style.background = '#ff0066';
                 }
-            }, 10000);
-        }
-        
-        // Random scary events
-        function randomScaryEvent() {
-            const events = [
-                () => {
-                    playSound(warningSound);
-                    showPopup('UNKNOWN CONNECTION', 'External entity attempting to connect to your system...');
-                    setTimeout(() => {
-                        if(Math.random() > 0.5) {
-                            playSound(accessDeniedSound);
-                            showPopup('SECURITY BREACH', 'Intrusion detected in sector 7!');
+                
+                scanCount++;
+                
+                if (scanCount > 20) {
+                    clearInterval(scanInterval);
+                    
+                    // Show access denied
+                    faceScan.style.display = 'none';
+                    const accessDenied = document.getElementById('access-denied');
+                    accessDenied.style.display = 'flex';
+                    
+                    // Flash warning
+                    let flashCount = 0;
+                    const flashInterval = setInterval(() => {
+                        accessDenied.classList.toggle('warning-flash');
+                        flashCount++;
+                        
+                        if (flashCount > 10) {
+                            clearInterval(flashInterval);
+                            accessDenied.style.display = 'none';
+                            
+                            // Show intrusion detected
+                            const intrusionDetected = document.getElementById('intrusion-detected');
+                            intrusionDetected.style.display = 'block';
+                            
+                            setTimeout(() => {
+                                intrusionDetected.style.display = 'none';
+                                showAresMessage("Intrusion protocol complete. Security has been notified.");
+                            }, 3000);
                         }
-                    }, 3000);
-                },
-                () => {
-                    playSound(glitchSound);
-                    cameraFeed.style.display = 'block';
-                    setTimeout(() => {
-                        cameraFeed.style.display = 'none';
-                    }, 2000);
-                },
-                () => {
-                    playSound(warningSound);
-                    document.body.classList.add('warning-flash');
-                    setTimeout(() => {
-                        document.body.classList.remove('warning-flash');
-                    }, 1000);
-                },
-                () => {
-                    playSound(beepSound);
-                    const monitorValues = document.querySelectorAll('.monitor-value');
-                    monitorValues[3].textContent = 'HIGH';
-                    monitorValues[3].style.color = '#ff0066';
-                    setTimeout(() => {
-                        monitorValues[3].textContent = 'LOW';
-                        monitorValues[3].style.color = '#00ff9d';
-                    }, 3000);
+                    }, 500);
                 }
-            ];
-            
-            // Trigger a random event
-            const randomEvent = events[Math.floor(Math.random() * events.length)];
-            randomEvent();
-            
-            // Schedule next random event
-            setTimeout(randomScaryEvent, 15000 + Math.random() * 25000);
+            }, 200);
         }
         
-        // Easter egg - if user tries to close the tab
-        window.addEventListener('beforeunload', function(e) {
-            e.preventDefault();
-            e.returnValue = 'Are you sure you want to leave? The system is monitoring your activity.';
+        function triggerSelfDestruct() {
+            const selfDestructPopup = document.getElementById('self-destruct-popup');
+            const countdownDisplay = document.getElementById('countdown-display');
+            
+            // Change to destruction sequence
+            countdownDisplay.textContent = "DESTROY";
+            countdownDisplay.style.fontSize = "3rem";
+            
+            // Play destruction sound
+            playSciFiSound('error');
+            
+            // Flash screen
+            let flashCount = 0;
+            const flashInterval = setInterval(() => {
+                document.body.style.background = flashCount % 2 === 0 ? '#ff0066' : '#000';
+                flashCount++;
+                
+                if (flashCount > 10) {
+                    clearInterval(flashInterval);
+                    document.body.style.background = '#0a0a12';
+                    
+                    // Hide popup
+                    selfDestructPopup.style.display = 'none';
+                    document.getElementById('overlay').style.display = 'none';
+                    
+                    // Show system reboot message
+                    showPopup("SYSTEM FAILURE", "Critical system error detected. Emergency reboot initiated.");
+                    
+                    // Reset system after a delay
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
+                }
+            }, 200);
+        }
+        
+        // Navigation
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.getAttribute('data-section');
+                
+                // Play navigation sound
+                playSciFiSound('confirm');
+                
+                // Show section message
+                showAresMessage(`Accessing ${section.toUpperCase()} module...`);
+            });
         });
     </script>
 </body>
